@@ -188,10 +188,7 @@ function horizontalCheck(piece){
 
 function diagCheck(piece) {
     for (var q = piece.col + 1; q < 8 - piece.col; q++) {
-
-        // these checks work but need refactoring (only work going right)
-
-        // 3 places away
+        // 1 gap in between piece and block
         if (piece.col + q === 3) {
             if (gridStatus[boardGridArray[piece.col + 2][piece.row + 2]]) {
                 for (var i = piece.col + q; i < 8; i++) {
@@ -213,7 +210,6 @@ function diagCheck(piece) {
                 }
             }
         }
-        
         if (q === 3) {
             if (gridStatus[boardGridArray[piece.col + 2][piece.row + 2]]) {
                 for (var i = q; i < 8; i++) {
@@ -236,6 +232,7 @@ function diagCheck(piece) {
             }  
         }
 
+        // no gap
         if (q - piece.col === 1) {
             if (piece.col > 0) {
                 if (gridStatus[boardGridArray[piece.col + 1][piece.row + 1]]) {
@@ -257,9 +254,7 @@ function diagCheck(piece) {
                         }
                     }
                 } 
-            }
-
-            else {
+            } else {
                 var length = availableMoves.length;
                 if (gridStatus[boardGridArray[piece.col + 1][piece.row + 1]]) {
                     for (var i = piece.col + 1; i < length; i++) {
@@ -282,10 +277,28 @@ function diagCheck(piece) {
                 } 
             }
         }
-
-        // run this if other 2 checks aren't true
         else {
             if (gridStatus[boardGridArray[piece.col + q][piece.row + q]]) {
+                for (var i = piece.col + q; i < 8; i++) {
+                    // Looks in front of piece that piecePos is referring to start removing
+                    var col = piece.col + i;
+                    var row = piece.row + i;
+    
+                    // no need to keep checking since we're at the end of the board so just return
+                    if (col > 7 || row > 7) {
+                        return;
+                    }
+    
+                    // removal of piece
+                    var index = availableMoves.indexOf(boardGridArray[col][row]);
+    
+                    if (index > -1) {
+                        availableMoves.splice(index, 1);
+                    }
+                }
+            }
+
+            if (gridStatus[boardGridArray[piece.col + q][piece.row - q]]) {
                 for (var i = piece.col + q; i < 8; i++) {
                     // Looks in front of piece that piecePos is referring to start removing
                     var col = piece.col + i;
@@ -317,13 +330,7 @@ function highlightPlacesToMove() {
         // show grid square
         ctx3.font = "30px Arial";
         ctx3.fillStyle = "white";
-        ctx3.fillText(availableMoves[i], gridArrayX[availableMoves[i]] + (37.5 / 2), gridArrayY[availableMoves[i]] + (gridSquareSize / 2))
-
-        if (pieceClicked.team1 === true) {
-            addTextToPage('availableMovesT1', availableMoves);
-        } else {
-            addTextToPage('availableMovesT2', availableMoves);
-        }        
+        ctx3.fillText(availableMoves[i], gridArrayX[availableMoves[i]] + (37.5 / 2), gridArrayY[availableMoves[i]] + (gridSquareSize / 2))      
     }
 }
 
