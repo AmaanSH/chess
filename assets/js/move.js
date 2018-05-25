@@ -261,7 +261,6 @@ function diagCheck(piece) {
 
             else {
                 var length = availableMoves.length;
-
                 if (gridStatus[boardGridArray[piece.col + 1][piece.row + 1]]) {
                     for (var i = piece.col + 1; i < length; i++) {
                         // Looks in front of piece that piecePos is referring to start removing

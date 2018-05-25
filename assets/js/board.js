@@ -19,7 +19,7 @@ function initBoard() {
             gridArrayX[row[blockRow] + blockCol] = x; // array name[index] = x associaticve array
             gridArrayY[row[blockRow] + blockCol] = y; // array name[index] = y
 
-            boardGridArray[blockRow][blockCol] = row[blockRow] + blockCol
+            boardGridArray[blockRow][blockCol] = row[blockRow] + blockCol;
             
             ctx.fillStyle = [chessBoardSquareA, chessBoardSquareB][(blockRow + blockCol) % 2];
             ctx.fillRect(blockCol * gridSquareSize, blockRow * gridSquareSize, gridSquareSize, gridSquareSize);
@@ -28,15 +28,11 @@ function initBoard() {
     }
 }
 
-function InitChessPiecesOnBoard()
-{
+function InitChessPiecesOnBoard() {
 
-    for (var i = 0; i < piecesArray.length; i++)
-    {
+    for (var i = 0; i < piecesArray.length; i++) {
         
-        if (piecesArray[i].IN_PLAY === true)
-        {
-
+        if (piecesArray[i].IN_PLAY === true) {
             gridStatus[boardGridArray[piecesArray[i].col][piecesArray[i].row]] = true;
 
             ctx2.fillStyle =  piecesArray[i].colour;
