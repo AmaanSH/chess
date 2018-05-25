@@ -21,8 +21,7 @@ function mousePos(event) {
         if (pieceClicked != null) {
             showPieceInfo();
             getMovementParameters(pieceClicked);
-            if (getMovementParameters(pieceClicked) !== null)
-            {
+            if (getMovementParameters(pieceClicked) !== null){
                 highlightPlacesToMove();
             }
         } else {
@@ -263,7 +262,6 @@ function validateMove(pieceClicked, posX, posY) {
 
     var moveRow = row[posY];
     var index = availableMoves.indexOf(moveRow + posX);
-    var indexOfCol = row.indexOf(pieceClicked.col)
 
     if (index > -1 && gridStatus[moveRow + posX] === false) {
         if (pieceClicked.type === 'PAWN') {
