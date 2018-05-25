@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    <title>ChessJS</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="outer">
+        <div class="inner">
+
+            <h1>ChessJS</h1>
+            <hr class="style-two">
+
+            <div>
+                <div class="piece-info box" id="pieceT1">
+                    <h3 class="title">Player 1</h3>
+                    <h3>Piece Selected:<span id="pieceSelected"></span></h3>
+                    <h3>Current Position:<span id="currentPos"></span></h3>
+                    <h3>Moves:<span id="availableMovesT1"></span></h3>
+                </div>
+
+                <div class="piece-info box" id="pieceT2">
+                    <h3 class="title">Player 2</h3>
+                    <h3>Piece Selected:<span id="pieceSelectedT2"></span></h3>
+                    <h3>Current Position:<span id="currentPosT2"></span></h3>
+                    <h3>Moves:<span id="availableMovesT2"></span></h3>
+                </div>
+            </div>
+            
+        <canvas id="chessBoard" height="600" width="600"></canvas>
+        <canvas id="chessPieces" height="600" width="600"></canvas>
+        <canvas id="chessHighlight" height="600" width="600"></canvas>
+
+        </div>
+    </div>
+
+    <script src='init.js'></script>
+    <script src="pieces.js"></script>
+    <script src="board.js"></script>
+    <script src="dom.js"></script>
+    <script src="move.js"></script>
+</body>
+</html>

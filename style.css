@@ -1,0 +1,97 @@
+canvas {
+    border: 10px solid #736453;
+    box-shadow: 2px 2px 8px #888888;
+}
+
+body {
+    font-family: "Roboto";
+    word-wrap: break-word;
+}
+
+h1 {
+    color: gray;
+    font-size: 50px;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+}
+
+h2 {
+    color: lightgray;
+    font-size: 15px;
+    text-align: center;
+}
+
+h3 {
+    color: white;
+    font-size: 15px;
+}
+
+span {
+    padding-left: 5px;
+    font-weight: 400;
+}
+
+#chessPieces {
+    z-index: 2;
+    position: absolute;
+}
+
+#chessHighlight {
+    z-index: 3;
+    position: absolute;
+}
+
+#chessBoard {
+    z-index: 1;
+    position: absolute;
+}
+
+#pieceT1 {
+    background-color: #736453;
+}
+
+#pieceT2 {
+    background-color: #A69B98;
+}
+
+hr.style-two {
+    width: 100%;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+ }
+
+.outer {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.inner {
+
+}
+
+.piece-info {
+    width: 300px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 1px;
+}
+
+.title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.box {
+    display: inline-block;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px #888888;
+    margin: 10px auto;
+}
+
+.centre-canvas {
+    text-align: center;
+}
