@@ -22,7 +22,4 @@ function clearPieceInfoText() {
   
     pieceSelectedT2.textContent = "";
     currentPosT2.textContent = "";
-
-    availableMovesT1.textContent = "";
-    availableMovesT2.textContent = "";
 }
