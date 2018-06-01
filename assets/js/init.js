@@ -25,7 +25,7 @@ var chessPieceColourB = '#A69B98';
 var textColour = 'white';
 
 const gridSquareSize = 75;
-const MAX_COL = 8
+
 
 // --------------------------
 

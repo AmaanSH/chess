@@ -128,8 +128,7 @@ function getMovementParameters(piece){
     horizontalCheck(piece);
 
     if (piece.type === "BISHOP" || piece.type === "QUEEN") {
-        rightDiagCheck(piece);
-        //leftDiagCheck(piece);
+        diagCheck(piece);
     }   
 }
 
@@ -187,10 +186,10 @@ function horizontalCheck(piece){
     }
 }
 
-function rightDiagCheck(piece) {
+function diagCheck(piece) {
     for (var q = 1; q < 8; q++) {
         // right down
-        if (q < 8 - piece.row || q < 8 - piece.col) {
+        if (q < 7 - piece.row && q <= 7 - piece.col) {
             if (gridStatus[boardGridArray[piece.col + q][piece.row + q]]) {
                 for (var i = 0; i < 8; i++) {
                     // Looks in front of piece that piecePos is referring to start removing
@@ -218,8 +217,52 @@ function rightDiagCheck(piece) {
                     var col = piece.col - q - i;
                     var row = piece.row - q - i;
 
-                    // no need to keep checking since we're at the end of the board so just return
+                    // no need to keep checking since we're at the end of the board
                     if (col >= 0 && row >= 0) {
+
+                        // removal of piece
+                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+
+                        if (index > -1) {
+                            availableMoves.splice(index, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        // right up
+        if (q <= piece.col && q <= 7 - piece.col) {
+            if (gridStatus[boardGridArray[piece.col - q][piece.row + q]]) {
+                for (var i = 0; i < 8; i++) {
+                    // Looks in front of piece that piecePos is referring to start removing
+                    var col = piece.col - q - i;
+                    var row = piece.row + q + i;
+
+                    // no need to keep checking since we're at the end of the board so just return
+                    if (col >= 0 && row < 8) {
+
+                        // removal of piece
+                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+
+                        if (index > -1) {
+                            availableMoves.splice(index, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        // left down
+        if (q <= 7 - piece.col && q >= piece.col) {
+            if (gridStatus[boardGridArray[piece.col + q][piece.row - q]]) {
+                for (var i = 0; i < 8; i++) {
+                    // Looks in front of piece that piecePos is referring to start removing
+                    var col = piece.col + q + i;
+                    var row = piece.row - q - i;
+
+                    // no need to keep checking since we're at the end of the board so just return
+                    if (col < 8 && row >= 0) {
 
                         // removal of piece
                         var index = availableMoves.indexOf(boardGridArray[col][row]);
@@ -238,11 +281,11 @@ function highlightPlacesToMove() {
     ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height) 
     for (var i = 0; i < availableMoves.length; i++) {        
         drawHighlight('rgba(0, 255, 0, 0.2)', availableMoves[i]);
-
+        
         // show grid square
         ctx3.font = "30px Arial";
         ctx3.fillStyle = "white";
-        ctx3.fillText(availableMoves[i], gridArrayX[availableMoves[i]] + (37.5 / 2), gridArrayY[availableMoves[i]] + (gridSquareSize / 2))      
+        ctx3.fillText(availableMoves[i], gridArrayX[availableMoves[i]] + (37.5 / 2), gridArrayY[availableMoves[i]] + (gridSquareSize / 2));      
     }
 }
 

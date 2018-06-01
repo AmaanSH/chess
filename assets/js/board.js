@@ -8,11 +8,8 @@ function initBoard() {
     var blockCol = 0;
     var blockRow = 0;
 
-    for (blockRow = 0; blockRow < 8; blockRow++) 
-    {
-        for (blockCol = 0; blockCol < 8; blockCol++) 
-        {
-
+    for (blockRow = 0; blockRow < 8; blockRow++) {
+        for (blockCol = 0; blockCol < 8; blockCol++) {
             x = blockCol * gridSquareSize;
             y = blockRow * gridSquareSize;
 
@@ -23,15 +20,13 @@ function initBoard() {
             
             ctx.fillStyle = [chessBoardSquareA, chessBoardSquareB][(blockRow + blockCol) % 2];
             ctx.fillRect(blockCol * gridSquareSize, blockRow * gridSquareSize, gridSquareSize, gridSquareSize);
-
         } 
     }
 }
 
 function InitChessPiecesOnBoard() {
 
-    for (var i = 0; i < piecesArray.length; i++) {
-        
+    for (var i = 0; i < piecesArray.length; i++) {   
         if (piecesArray[i].IN_PLAY === true) {
             gridStatus[boardGridArray[piecesArray[i].col][piecesArray[i].row]] = true;
 
@@ -44,5 +39,6 @@ function InitChessPiecesOnBoard() {
         }
     }
 }
+
 initBoard();
 InitChessPiecesOnBoard();
