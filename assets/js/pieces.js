@@ -82,6 +82,20 @@ Piece.prototype.movement = function()
     }
 }
 
+Piece.prototype.taking = function () {
+    if (this.type === "PAWN") {
+
+        // refers too how many spaces the code should look through to check if taking requirements met
+        this.TAKE_UP = 0;
+        this.TAKE_DOWN = 0;
+        this.TAKE_LEFT = 0;
+        this.TAKE_RIGHT = 0;
+        this.TAKE_DIAG = 1;
+
+        return { UP: this.TAKE_UP, DOWN: this.TAKE_DOWN, LEFT: this.TAKE_LEFT, RIGHT: this.TAKE_RIGHT, DIAG: this.TAKE_DIAG };
+    }
+}
+
 // Defines pawn pieces for black team 
 var pawn1 = new Piece('PAWN', chessPieceColourA, 1, 0, true, false, 'pawn1', true);
 var pawn2 = new Piece('PAWN', chessPieceColourA, 1, 1, true, false, 'pawn2', true); 
@@ -91,15 +105,6 @@ var pawn5 = new Piece('PAWN', chessPieceColourA, 1, 4, true, false, 'pawn5', tru
 var pawn6 = new Piece('PAWN', chessPieceColourA, 1, 5, true, false, 'pawn6', true);
 var pawn7 = new Piece('PAWN', chessPieceColourA, 1, 6, true, false, 'pawn7', true);
 var pawn8 = new Piece('PAWN', chessPieceColourA, 1, 7, true, false, 'pawn8', true);
-
-pawn1.F_TURN = true;
-pawn2.F_TURN = true;
-pawn3.F_TURN = true;
-pawn4.F_TURN = true;
-pawn5.F_TURN = true;
-pawn6.F_TURN = true;
-pawn7.F_TURN = true;
-pawn8.F_TURN = true;
 
 var castle1 = new Piece('CASTLE', chessPieceColourA, 0, 0, true, false, 'castle1', true);
 var castle2 = new Piece('CASTLE', chessPieceColourA, 0, 7, true, false, 'castle2', true);
@@ -124,15 +129,6 @@ var pawn14 = new Piece('PAWN', chessPieceColourB, 6, 5, true, false, 'pawn14', f
 var pawn15 = new Piece('PAWN', chessPieceColourB, 6, 6, true, false, 'pawn15', false);
 var pawn16 = new Piece('PAWN', chessPieceColourB, 6, 7, true, false, 'pawn16', false);
 
-pawn9.F_TURN = true;
-pawn10.F_TURN = true;
-pawn11.F_TURN = true;
-pawn12.F_TURN = true;
-pawn13.F_TURN = true;
-pawn14.F_TURN = true;
-pawn15.F_TURN = true;
-pawn16.F_TURN = true;
-
 var castle3 = new Piece('CASTLE', chessPieceColourB, 7, 0, true, false, 'castle3', false);
 var castle4 = new Piece('CASTLE', chessPieceColourB, 7, 7, true, false, 'castle4', false);
 
@@ -146,3 +142,11 @@ var king2 = new Piece('KING', chessPieceColourB, 7, 3, true, false, 'king2', fal
 var queen2 = new Piece('QUEEN', chessPieceColourB, 7, 4, true, false, 'queen2', false);
 
 piecesArray.push(pawn1, pawn2, pawn3, pawn4, pawn5, pawn6, pawn7, pawn8, castle1, castle2, knight1, knight2, bishop1, bishop2, king1, queen1, pawn9, pawn10, pawn11, pawn12, pawn13, pawn14, pawn15, pawn16, castle3, castle4, knight3, knight4, bishop3, bishop4, king2, queen2)
+
+// adding special flags
+piecesArray.forEach(function (value) {
+    if (value.type === "PAWN") {
+        value.F_TURN = true;
+        value.TAKE_FORWARD = true;
+    }
+})

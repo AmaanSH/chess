@@ -15,20 +15,27 @@ function mousePos(event) {
     mouse.x = clickPosX
     mouse.y = clickPosY
 
-    if (pieceClicked == false)  {
+    if (pieceClicked == false && taking == false)  {
         pieceClicked = getPieceClicked();
 
         if (pieceClicked != null) {
             showPieceInfo();
             getMovementParameters(pieceClicked);
+            getTakingParameters(pieceClicked);
+
             if (getMovementParameters(pieceClicked) !== null){
-                highlightPlacesToMove();
+                highlightPlacesToMove(); 
+            }
+
+            if (getTakingParameters(pieceClicked) !== null) {
+                highlightTakeablePlaces(pieceClicked);
             }
         } else {
             pieceClicked = false;
         }
     } else {
-       movePiece(pieceClicked, clickPosX, clickPosY);
+        movePiece(pieceClicked, clickPosX, clickPosY);
+
        ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
 
         pieceClicked = false;
@@ -53,9 +60,9 @@ function addAllMovesForPieceToArray(piece) {
     var posX = clickPosX / gridSquareSize;
     var posY = clickPosY / gridSquareSize;
 
-    var moveParams = piece.movement();
+    var moveParams = piece.movement(); 
     var allMovesForPiece = [];
-
+   
     // gets index of the piececlick col inside of row array
     var rowType = piece.col;
 

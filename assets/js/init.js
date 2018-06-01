@@ -53,6 +53,7 @@ var clickPosX;
 var clickPosY;
 
 var pieceClicked = false;
+var taking = false;
 
 var mouse = 
 {
