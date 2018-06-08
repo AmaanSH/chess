@@ -13,23 +13,27 @@
             <h1>ChessJS</h1>
             <hr class="style-two">
 
-            <div>
+            <div id="info">
                 <div class="piece-info box" id="pieceT1">
                     <h3 class="title">Player 1</h3>
-                    <h3>Piece Selected:<span id="pieceSelected"></span></h3>
-                    <h3>Current Position:<span id="currentPos"></span></h3>
+                    <h3>Piece Selected:<span class="info" id="pieceSelected"></span></h3>
+                    <h3>Current Position:<span class="info" id="currentPos"></span></h3>
+                    <h3>Pieces Taken:<span class="info" id="piecesTakenT1">0</span></h3>
                 </div>
+
+                <span id="timer">00:00</span>
 
                 <div class="piece-info box" id="pieceT2">
                     <h3 class="title">Player 2</h3>
-                    <h3>Piece Selected:<span id="pieceSelectedT2"></span></h3>
-                    <h3>Current Position:<span id="currentPosT2"></span></h3>
+                    <h3>Piece Selected:<span class="info" id="pieceSelectedT2"></span></h3>
+                    <h3>Current Position:<span class="info" id="currentPosT2"></span></h3>
+                    <h3>Pieces Taken:<span class="info" id="piecesTakenT2">0</span></h3>
                 </div>
             </div>
 
-            <canvas id="chessBoard" height="600" width="600"></canvas>
-            <canvas id="chessPieces" height="600" width="600"></canvas>
-            <canvas id="chessHighlight" height="600" width="600"></canvas>
+            <canvas class="border" id="chessBoard" height="600" width="600"></canvas>
+            <canvas class="border" id="chessPieces" height="600" width="600"></canvas>
+            <canvas class="border" id="chessHighlight" height="600" width="600"></canvas>
 
         </div>
     </div>
@@ -40,5 +44,6 @@
     <script src="assets/js/dom.js"></script>
     <script src="assets/js/move.js"></script>
     <script src="assets/js/taking.js"></script>
+    <script src="assets/js/winning.js"></script>
 </body>
 </html>

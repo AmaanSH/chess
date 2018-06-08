@@ -1,6 +1,8 @@
 canvas {
     border: 10px solid #736453;
     box-shadow: 2px 2px 8px #888888;
+    margin-left: 10em;
+    margin-top: 20px;
 }
 
 body {
@@ -27,11 +29,6 @@ h3 {
     font-size: 15px;
 }
 
-span {
-    padding-left: 5px;
-    font-weight: 400;
-}
-
 #chessPieces {
     z-index: 2;
     position: absolute;
@@ -55,6 +52,14 @@ span {
     background-color: #A69B98;
 }
 
+#timer {
+    width: 20%;
+    font-size: 50px;
+    text-align: center;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
 hr.style-two {
     width: 100%;
     border: 0;
@@ -66,10 +71,6 @@ hr.style-two {
     display: flex;
     justify-content: center;
     
-}
-
-.inner {
-
 }
 
 .piece-info {
@@ -94,4 +95,9 @@ hr.style-two {
 
 .centre-canvas {
     text-align: center;
+}
+
+.info {
+    padding-left: 5px;
+    font-weight: 400;
 }
