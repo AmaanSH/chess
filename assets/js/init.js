@@ -22,7 +22,12 @@ var chessBoardSquareB = '#F2E8DC';
 var chessPieceColourA = '#594C3C';
 var chessPieceColourB = '#A69B98';
 
+document.getElementById('pieceT1').style.backgroundColor = chessPieceColourA;
+document.getElementById('pieceT2').style.backgroundColor = chessPieceColourB;
+
 var textColour = 'white';
+var score1 = 0;
+var score2 = 0;
 
 const gridSquareSize = 75;
 
@@ -35,6 +40,7 @@ var gridArrayY = [];
 var piecesArray = [];
 var newPiecesArray = [];
 var availableMoves = [];
+var takeArray = [];
 
 var row = ["A", "B", "C", "D", "E", "F", "G", "H"];
 

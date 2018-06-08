@@ -16,6 +16,14 @@ function showPieceInfo() {
     }
 }
 
+function updateTakenPiecesText() {
+    if (pieceClicked.team1) {
+        addTextToPage('piecesTakenT1', score1);
+    } else {
+        addTextToPage('piecesTakenT2', score2);
+    }   
+}
+
 function clearPieceInfoText() {
     pieceSelected.textContent = "";
     currentPos.textContent = "";

@@ -27,7 +27,7 @@ function initBoard() {
 function InitChessPiecesOnBoard() {
 
     for (var i = 0; i < piecesArray.length; i++) {   
-        if (piecesArray[i].IN_PLAY === true) {
+        if (piecesArray[i].CAPTURED !== true) {
             gridStatus[boardGridArray[piecesArray[i].col][piecesArray[i].row]] = true;
 
             ctx2.fillStyle =  piecesArray[i].colour;

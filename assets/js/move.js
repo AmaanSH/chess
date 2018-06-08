@@ -29,6 +29,7 @@ function mousePos(event) {
 
             if (getTakingParameters(pieceClicked) !== null) {
                 highlightTakeablePlaces(pieceClicked);
+                takeArray = getTakingParameters(pieceClicked);
             }
         } else {
             pieceClicked = false;
@@ -36,9 +37,10 @@ function mousePos(event) {
     } else {
         movePiece(pieceClicked, clickPosX, clickPosY);
 
-       ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
+        ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
 
         pieceClicked = false;
+        takeArray = [];
         clearPieceInfoText();
     }
 }
@@ -60,33 +62,68 @@ function addAllMovesForPieceToArray(piece) {
     var posX = clickPosX / gridSquareSize;
     var posY = clickPosY / gridSquareSize;
 
-    var moveParams = piece.movement(); 
+    var moveParams = piece.movement();
+
     var allMovesForPiece = [];
    
     // gets index of the piececlick col inside of row array
     var rowType = piece.col;
 
     if (piece.team1) {
-        for (var down = 0; down < moveParams.down; down++) {
+        for (var down = 0; down <= moveParams.down; down++) {
             if (piece.F_TURN) {
-                moveParams.down = 3;
+                moveParams.down = 2;
             }
-            allMovesForPiece.push(row[rowType + down] + posX);
+
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+
+                // 2 movements on edge
+                allMovesForPiece.push(row[rowType + down] + (posX - 2));
+                allMovesForPiece.push(row[rowType + down] + (posX + 2));
+
+                // 2 down movements
+                allMovesForPiece.push(row[rowType + (down + 1)] + posX);
+
+                // 1 down movement on the edges
+                allMovesForPiece.push(row[rowType + 2] + (posX - 1));
+                allMovesForPiece.push(row[rowType + 2] + (posX + 1));
+            } 
+            else {
+                allMovesForPiece.push(row[rowType + down] + posX);
+            }         
         }
 
-        for (var up = 0; up < moveParams.up; up++) {
-            allMovesForPiece.push(row[rowType - up] + posX);
+        for (var up = 0; up <= moveParams.up; up++) {
+            
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+
+                // 2 down movements on edge
+                allMovesForPiece.push(row[rowType - up] + (posX + 2));
+                allMovesForPiece.push(row[rowType - up] + (posX - 2));
+                
+                // 2 up movements connecting to 1 on each end
+                allMovesForPiece.push(row[rowType - (up + 1)] + posX);
+
+                // right up movement on the edges
+                allMovesForPiece.push(row[rowType - 2] + (posX - 1));
+                allMovesForPiece.push(row[rowType - 2] + (posX + 1));
+            } 
+            else {
+                allMovesForPiece.push(row[rowType - up] + posX);
+            }        
         }
 
-        for (var right = 0; right < moveParams.right; right++) {
+        for (var right = 0; right <= moveParams.right; right++) {
             allMovesForPiece.push(row[rowType] + (posX + right));
         }
 
-        for (var left = 0; left < moveParams.left; left++) {
+        for (var left = 0; left <= moveParams.left; left++) {
             allMovesForPiece.push(row[rowType] + (posX - left));
         }
 
-        for (var diag = 0; diag < moveParams.diag; diag++) {
+        for (var diag = 0; diag <= moveParams.diag; diag++) {
             allMovesForPiece.push(row[rowType + diag] + (posX + diag));
             allMovesForPiece.push(row[rowType - diag] + (posX + diag));
             allMovesForPiece.push(row[rowType + diag] + (posX - diag));
@@ -94,26 +131,26 @@ function addAllMovesForPieceToArray(piece) {
         }
     }
     if (piece.team1 !== true) {
-        for (var down = 0; down < moveParams.down; down++) {
+        for (var down = 0; down <= moveParams.down; down++) {
             if (piece.F_TURN) {
-                moveParams.down = 3;
+                moveParams.down = 2;
             }
             allMovesForPiece.push(row[rowType - down] + posX);
         }
 
-        for (var up = 0; up < moveParams.up; up++) {
+        for (var up = 0; up <= moveParams.up; up++) {
             allMovesForPiece.push(row[rowType + up] + posX);
         }
 
-        for (var right = 0; right < moveParams.right; right++) {
+        for (var right = 0; right <= moveParams.right; right++) {
             allMovesForPiece.push(row[rowType] + (posX + right));
         }
 
-        for (var left = 0; left < moveParams.left; left++) {
+        for (var left = 0; left <= moveParams.left; left++) {
             allMovesForPiece.push(row[rowType] + (posX - left));
         }
 
-        for (var diag = 0; diag < moveParams.diag; diag++) {
+        for (var diag = 0; diag <= moveParams.diag; diag++) {
             allMovesForPiece.push(row[rowType + diag] + (posX + diag));
             allMovesForPiece.push(row[rowType - diag] + (posX + diag));
             allMovesForPiece.push(row[rowType + diag] + (posX - diag));
@@ -141,6 +178,7 @@ function getMovementParameters(piece){
 
 function verticalCheck(piece) {
     var colLoop = 0;
+
     for (var i = 0 - piece.col; colLoop < 8; i++) {
         colLoop++;
         // up check
@@ -308,8 +346,28 @@ function validateMove(pieceClicked, posX, posY) {
     var moveRow = row[posY];
     var index = availableMoves.indexOf(moveRow + posX);
 
-    if (index > -1 && gridStatus[moveRow + posX] === false) {
-        if (pieceClicked.type === 'PAWN') {
+    // if takeable piece available
+    if (takeArray.length > 0) {
+        takeArray.forEach(function (takeableSpaces) {
+            if (takeableSpaces == moveRow + posX && checkIfPieceCanBeTaken(pieceClicked)) {
+                pieceClicked.inTake = true;
+                ctx2.clearRect(gridArrayX[boardGridArray[posY][posX]], gridArrayY[boardGridArray[posY][posX]], gridSquareSize, gridSquareSize);
+
+                gridStatus[boardGridArray[posY][posX]] = false;
+                updateTakenPiecesText();
+            }
+        });
+    } 
+    
+    if (index > -1 && gridStatus[moveRow + posX] === false && pieceClicked.inTake !== true) {
+        if (pieceClicked.type === 'PAWN' && pieceClicked.F_TURN) {
+            pieceClicked.F_TURN = false;
+        }
+        return true;
+    }
+
+    if (pieceClicked.inTake) {
+        if (pieceClicked.type === 'PAWN' && pieceClicked.F_TURN) {
             pieceClicked.F_TURN = false;
         }
         return true;
@@ -330,21 +388,25 @@ function movePiece(pieces, newCol, newRow) {
 
         pieces.col = newRow;
         pieces.row = newCol;
-        
+
         gridStatus[boardGridArray[oldCol][oldRow]] = false;
         gridStatus[boardGridArray[newRow][newCol]] = true;
 
         newPiecesArray.push(pieces);
 
         for (var i = 0; i < newPiecesArray.length; i++) {
-            if (newPiecesArray[i].IN_PLAY) {
-                ctx2.fillStyle =  newPiecesArray[i].colour;
+            if (newPiecesArray[i].CAPTURED !== true) {
+                ctx2.fillStyle = newPiecesArray[i].colour;
                 ctx2.fillRect(gridArrayX[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 12.5, gridArrayY[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 12.5, 50, 50)
-        
+
                 ctx2.fillStyle = textColour;
                 ctx2.font = "bold 10px Arial";
                 ctx2.fillText(newPiecesArray[i].type, gridArrayX[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 15, gridArrayY[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 30);
-            } 
-        }  
+            }
+        }
+
+        if (pieces.inTake) {
+            pieces.inTake = false;
+        }
     } 
 }
