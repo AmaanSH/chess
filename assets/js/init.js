@@ -25,6 +25,8 @@ var chessPieceColourB = '#A69B98';
 document.getElementById('pieceT1').style.backgroundColor = chessPieceColourA;
 document.getElementById('pieceT2').style.backgroundColor = chessPieceColourB;
 
+document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
+
 var textColour = 'white';
 var score1 = 0;
 var score2 = 0;
