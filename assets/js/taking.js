@@ -121,9 +121,17 @@ function checkIfPieceCanBeTaken(piece) {
 
                     if (piece.team1) {
                         score1++
+
+                        if (score1 === 16) {
+                            checkWinningParameters();
+                        }
                     }
                     if (piece.team1 !== true) {
                         score2++
+
+                        if (score1 === 16) {
+                            checkWinningParameters();
+                        }
                     }
 
                     piecesArray[i].CAPTURED = true;
