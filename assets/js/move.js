@@ -135,11 +135,44 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-            allMovesForPiece.push(row[rowType - down] + posX);
+
+            if (piece.type === "KNIGHT") {
+
+                // 2 movements on edge
+                allMovesForPiece.push(row[rowType - down] + (posX - 2));
+                allMovesForPiece.push(row[rowType - down] + (posX + 2));
+
+                // 2 down movements
+                allMovesForPiece.push(row[rowType - (down + 1)] + posX);
+
+                // 1 down movement on the edges
+                allMovesForPiece.push(row[rowType - 2] + (posX - 1));
+                allMovesForPiece.push(row[rowType - 2] + (posX + 1));
+
+            }
+            else {
+                allMovesForPiece.push(row[rowType - down] + posX);
+            }          
         }
 
         for (var up = 0; up <= moveParams.up; up++) {
-            allMovesForPiece.push(row[rowType + up] + posX);
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+
+                // 2 down movements on edge
+                allMovesForPiece.push(row[rowType + up] + (posX + 2));
+                allMovesForPiece.push(row[rowType + up] + (posX - 2));
+
+                // 2 up movements connecting to 1 on each end
+                allMovesForPiece.push(row[rowType - (up + 1)] + posX);
+
+                // right up movement on the edges
+                allMovesForPiece.push(row[rowType + 2] + (posX - 1));
+                allMovesForPiece.push(row[rowType + 2] + (posX + 1));
+            }
+            else {
+                allMovesForPiece.push(row[rowType + up] + posX);
+            }        
         }
 
         for (var right = 0; right <= moveParams.right; right++) {
@@ -356,6 +389,7 @@ function validateMove(pieceClicked, posX, posY) {
                 gridStatus[boardGridArray[posY][posX]] = false;
                 updateTakenPiecesText();
             }
+            checkMateCheck();
         });
     } 
     
