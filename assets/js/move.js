@@ -15,7 +15,7 @@ function mousePos(event) {
     mouse.x = clickPosX
     mouse.y = clickPosY
 
-    if (pieceClicked == false && taking == false)  {
+    if (pieceClicked == false)  {
         pieceClicked = getPieceClicked();
 
         if (pieceClicked != null) {
@@ -31,10 +31,16 @@ function mousePos(event) {
                 highlightTakeablePlaces(pieceClicked);
                 takeArray = getTakingParameters(pieceClicked);
             }
+
         } else {
             pieceClicked = false;
         }
     } else {
+
+        if (pieceClicked.type === "KING" && pieceClicked.IN_CHECK) {
+            hasKingMoved(pieceClicked.col, pieceClicked.row, clickPosX, clickPosY);
+        }
+
         movePiece(pieceClicked, clickPosX, clickPosY);
 
         ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
@@ -379,6 +385,8 @@ function validateMove(pieceClicked, posX, posY) {
     var moveRow = row[posY];
     var index = availableMoves.indexOf(moveRow + posX);
 
+    var checkMateChecked = false;
+
     // if takeable piece available
     if (takeArray.length > 0) {
         takeArray.forEach(function (takeableSpaces) {
@@ -389,10 +397,13 @@ function validateMove(pieceClicked, posX, posY) {
                 gridStatus[boardGridArray[posY][posX]] = false;
                 updateTakenPiecesText();
             }
-            checkMateCheck();
+            // if king is inside of takeArray
+            if (checkMateChecked === false) {
+                checkMateCheck();
+                checkMateChecked = true;
+            }               
         });
     } 
-    
     if (index > -1 && gridStatus[moveRow + posX] === false && pieceClicked.inTake !== true) {
         if (pieceClicked.type === 'PAWN' && pieceClicked.F_TURN) {
             pieceClicked.F_TURN = false;
@@ -411,6 +422,7 @@ function validateMove(pieceClicked, posX, posY) {
 }
 
 function movePiece(pieces, newCol, newRow) {
+
     if (validateMove(pieces, newCol, newRow) === true) {
         var oldCol = pieces.col;
         var oldRow = pieces.row;
@@ -426,7 +438,7 @@ function movePiece(pieces, newCol, newRow) {
         gridStatus[boardGridArray[oldCol][oldRow]] = false;
         gridStatus[boardGridArray[newRow][newCol]] = true;
 
-        newPiecesArray.push(pieces);
+       newPiecesArray.push(pieces);
 
         for (var i = 0; i < newPiecesArray.length; i++) {
             if (newPiecesArray[i].CAPTURED !== true) {

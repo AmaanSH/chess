@@ -1,9 +1,9 @@
 "use strict";
 
 // TO DO
-// how many pieces left on board?
-// How many pieces have each team collected
-// Is the King still on the board? (is it in check?)
+// how many pieces left on board? -- DONE
+// How many pieces have each team collected -- DONE
+// Is the King still on the board? (is it in check?) -- DONE
 
 function checkWinningParameters() {
     if (score1 === 16) {
@@ -16,20 +16,43 @@ function checkWinningParameters() {
 }
 
 function checkMateCheck() {
-    // check taking array of piece
-    // is a king piece in its path?
-    // if it is then alert user
-
-    var kingIndex1 = piecesArray.indexOf(king1);
-    var kingIndex2 = piecesArray.indexOf(king2);
-
-    var currentKingPos1 = boardGridArray[piecesArray[kingIndex1].col][piecesArray[kingIndex1].row];
-    var currentKingPos2 = boardGridArray[piecesArray[kingIndex2].col][piecesArray[kingIndex2].row];
+    // check taking array of piece -- DONE
+    // is a king piece in its path? -- DONE
+    // if it is then alert user -- DONE
 
     takeArray.forEach(function (value) {
-        if (value === boardGridArray[piecesArray[kingIndex2].col][piecesArray[kingIndex2].row] || value === boardGridArray[piecesArray[kingIndex1].col][piecesArray[kingIndex1].row]) {
-            alert('Your king is currently in check. If you do not move you will lose the game')
+        if (value === boardGridArray[king1.col][king1.row]) {
+            alert('Your king is currently in check. If you do not move you will lose the game');
+            king1.IN_CHECK = true;
+            return;
+        }
+        else if (value === boardGridArray[king2.col][king2.row]) {
+            alert('Your king is currently in check. If you do not move you will lose the game');
+            king2.IN_CHECK = true;
         }
     });
+}
+
+function hasKingMoved(oldColPos, oldRowPos, newColPos, newRowPos) {
+
+    newColPos = newColPos / gridSquareSize;
+    newRowPos = newRowPos / gridSquareSize;
+
+    if (king1.IN_CHECK) {
+        if (boardGridArray[oldColPos][oldRowPos] === boardGridArray[newRowPos][newColPos]) {
+            alert("Game Over. Team 1's king has been check mated. Team 2 has won")
+        }
+        else {
+            king1.IN_CHECK = false;
+        }
+    }
+    else if (king2.IN_CHECK) {
+        if (boardGridArray[oldColPos][oldRowPos] === boardGridArray[newRowPos][newColPos]) {
+            alert("Game Over. Team 2's king has been check mated. Team 1 has won")
+        }
+        else {
+            king2.IN_CHECK = false;
+        }
+    }   
 }
 

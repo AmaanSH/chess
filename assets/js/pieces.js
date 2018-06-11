@@ -210,4 +210,8 @@ piecesArray.forEach(function (value) {
         value.F_TURN = true;
         value.TAKE_FORWARD = true;
     }
+
+    if (value.type === "KING") {
+        value.IN_CHECK = false;
+    }
 });
