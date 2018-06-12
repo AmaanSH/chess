@@ -43,6 +43,11 @@ h3 {
     position: absolute;
 }
 
+#endScreen {
+    z-index: 4;
+    position: absolute;
+}
+
 #pieceT1 {
     background-color: #736453;
 }
@@ -72,6 +77,14 @@ h3 {
     padding-right: 100px;
 }
 
+#piecesTaken {
+    width: 20%;
+    font-size: 30px;
+    text-align: center;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
 hr.style-two {
     width: 100%;
     border: 0;
@@ -85,7 +98,7 @@ hr.style-two {
     
 }
 
-.piece-info {
+.piece-info {   
     width: 300px;
     padding-left: 5px;
     padding-top: 5px;

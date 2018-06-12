@@ -214,4 +214,11 @@ piecesArray.forEach(function (value) {
     if (value.type === "KING") {
         value.IN_CHECK = false;
     }
+
+    if (value.team1) {
+        value.activeTurn = true;
+    }
+    if (!value.team1) {
+        value.activeTurn = false;
+    }
 });

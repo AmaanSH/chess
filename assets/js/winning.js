@@ -5,17 +5,8 @@
 // How many pieces have each team collected -- DONE
 // Is the King still on the board? (is it in check?) -- DONE
 
-function checkWinningParameters() {
-    if (score1 === 16) {
-        alert("Game is over. All the pieces have been collected.");
-        document.location.reload();
-    } else if (score2 === 16) {
-        alert("Game is over. The other team collected all the pieces");
-        document.location.reload();
-    }
-}
-
 function checkMateCheck() {
+
     // check taking array of piece -- DONE
     // is a king piece in its path? -- DONE
     // if it is then alert user -- DONE
@@ -40,7 +31,8 @@ function hasKingMoved(oldColPos, oldRowPos, newColPos, newRowPos) {
 
     if (king1.IN_CHECK) {
         if (boardGridArray[oldColPos][oldRowPos] === boardGridArray[newRowPos][newColPos]) {
-            alert("Game Over. Team 1's king has been check mated. Team 2 has won")
+            alert("Game Over. Team 1's king has been check mated. Team 2 has won");
+            endGame();
         }
         else {
             king1.IN_CHECK = false;
@@ -49,6 +41,7 @@ function hasKingMoved(oldColPos, oldRowPos, newColPos, newRowPos) {
     else if (king2.IN_CHECK) {
         if (boardGridArray[oldColPos][oldRowPos] === boardGridArray[newRowPos][newColPos]) {
             alert("Game Over. Team 2's king has been check mated. Team 1 has won")
+            endGame();
         }
         else {
             king2.IN_CHECK = false;

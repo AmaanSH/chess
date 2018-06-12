@@ -8,6 +8,10 @@
 // Check to see if piece that is in taking parameters is not on the same team -- DONE
 // Change Captured flag to true and in play false -- DONE
 
+// BUG LIST
+// Other side blocking check issue --
+// Check mate checks need adjusting --
+// Knight turns on team 2 are missing bottom 2 movements --
 
 function allTakingParameters(piece) {
     var posX = clickPosX / gridSquareSize;
@@ -99,12 +103,37 @@ function getTakingParameters(piece) {
         return gridStatus[value] !== undefined && value !== boardGridArray[piece.col][piece.row] && gridStatus[value] !== false;
     });
 
+    // check the contents of the takearray
+    // find what pieces are at those spaces
+    // if the same team, remove from array
+    if (taking.length > 0) {
+        for (var j = 0; j < taking.length; j++) {
+            for (var i = 0; i < piecesArray.length; i++) {       
+                var spaceToCheck = boardGridArray[piecesArray[i].col][piecesArray[i].row];
+
+                // remove as same team
+                if (spaceToCheck === taking[j]) {
+                    if (piecesArray[i].team1 === piece.team1) {
+                        taking.splice(j, 1);  
+                        j =- 1;
+                    }
+                }
+            }
+        }
+    }
+
     return taking;
 }
 
 function highlightTakeablePlaces(piece) {
-    for (var i = 0; i < getTakingParameters(piece).length; i++) {
-        drawHighlight('rgba(255, 0, 0, 0.2)', getTakingParameters(piece)[i]);
+
+    // BUGS
+    // Your own pieces are being highlighted as takeable, but not possible
+
+    if (getTakingParameters(piece).length > 0) {
+        for (var i = 0; i <= getTakingParameters(piece).length; i++) {
+            drawHighlight('rgba(255, 0, 0, 0.2)', getTakingParameters(piece)[i]);
+        }
     }
 }
 
@@ -113,37 +142,26 @@ function checkIfPieceCanBeTaken(piece) {
         // checks to see if the mouseX position matches with the index stated in the piecesArray 
         if (mouse.x >= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.x <= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
             // checks to see if the mouseY position matches with the index in the pieces array
-            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
-                // if both teams same can't take
-                if (piece.team1 === piecesArray[i].team1) {                 
-                    return false;
-                } else {
-
-                    if (piece.team1) {
-                        score1++
-
-                        if (score1 === 16) {
-                            checkWinningParameters();
-                        }
-                    }
-                    if (piece.team1 !== true) {
-                        score2++
-
-                        if (score1 === 16) {
-                            checkWinningParameters();
-                        }
-                    }
-
-                    piecesArray[i].CAPTURED = true;
-                    piece.piecesTaken++    
+            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {         
+                piecesArray[i].CAPTURED = true;
+                piece.piecesTaken++    
                                  
-                    console.log(piecesArray[i].id + " (team1=" + piecesArray[i].team1 + ") has been captured by " + piece.id + " this piece has taken " + piece.piecesTaken + " pieces.")
+                console.log(piecesArray[i].id + " (team1=" + piecesArray[i].team1 + ") has been captured by " + piece.id + " this piece has taken " + piece.piecesTaken + " pieces.")
 
-                    // remove piece from array
-                    piecesArray.splice(i, 1);            
-                    return true;
-                }
+                // remove piece from array
+                piecesArray.splice(i, 1); 
+                updatingScore(piece);
+                return true;
             }
         }
+    }
+}
+
+function updatingScore(piece) {
+    if (piece.team1) {
+        score1++
+    }
+    if (piece.team1 !== true) {
+        score2++
     }
 }

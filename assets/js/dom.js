@@ -6,28 +6,27 @@ function addTextToPage(id, text) {
     textOnPage.textContent = text;
 }
 
-function showPieceInfo() {
-    if (pieceClicked.team1 === true) {
-        addTextToPage('pieceSelected', pieceClicked.type)
-        addTextToPage('currentPos', boardGridArray[pieceClicked.col][pieceClicked.row])
-    } else {
-        addTextToPage('pieceSelectedT2', pieceClicked.type);
-        addTextToPage('currentPosT2', boardGridArray[pieceClicked.col][pieceClicked.row]);
+function updateTurnText() {
+    if (player1Turn) {
+        addTextToPage('turn', "PLAYER 1 TURN");
+        addTextToPage('piecesTaken', "PIECES TAKEN: " + score1);
+
+        document.getElementById('turn-box').style.backgroundColor = chessPieceColourA; 
+        return;
+    }
+    if (player2Turn) {
+        addTextToPage('turn', "PLAYER 2 TURN");
+        addTextToPage('piecesTaken', "PIECES TAKEN: " + score2);
+
+        document.getElementById('turn-box').style.backgroundColor = chessPieceColourB; 
+        return;
     }
 }
 
-function updateTakenPiecesText() {
-    if (pieceClicked.team1) {
-        addTextToPage('piecesTakenT1', score1);
-    } else {
-        addTextToPage('piecesTakenT2', score2);
-    }   
-}
-
-function clearPieceInfoText() {
+/* function clearPieceInfoText() {
     pieceSelected.textContent = "";
     currentPos.textContent = "";
   
     pieceSelectedT2.textContent = "";
     currentPosT2.textContent = "";
-}
+} */

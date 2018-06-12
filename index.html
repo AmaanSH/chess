@@ -13,26 +13,13 @@
             <hr class="style-two">
 
             <div id="info">
-                <div class="piece-info box" id="pieceT1">
-                    <h3 class="title">Player 1</h3>
-                    <h3>Piece Selected:<span class="info" id="pieceSelected"></span></h3>
-                    <h3>Current Position:<span class="info" id="currentPos"></span></h3>
-                    <h3>Pieces Taken:<span class="info" id="piecesTakenT1">0</span></h3>
-                </div>
-
                 <div class="box title" id="turn-box">
                     <span id="turn">PLAYER 1 TURN</span>
-                    <span id="timer">00:00</span>
-                </div>
-
-                <div class="piece-info box" id="pieceT2">
-                    <h3 class="title">Player 2</h3>
-                    <h3>Piece Selected:<span class="info" id="pieceSelectedT2"></span></h3>
-                    <h3>Current Position:<span class="info" id="currentPosT2"></span></h3>
-                    <h3>Pieces Taken:<span class="info" id="piecesTakenT2">0</span></h3>
+                    <span id="piecesTaken">PIECES TAKEN: 0</span>
                 </div>
             </div>
             <div class="outer">
+                <canvas id="endScreen" height="600" width="600"></canvas>
                 <canvas id="chessBoard" height="600" width="600"></canvas>
                 <canvas id="chessPieces" height="600" width="600"></canvas>
                 <canvas id="chessHighlight" height="600" width="600"></canvas>
@@ -47,5 +34,7 @@
     <script src="assets/js/taking.js"></script>
     <script src="assets/js/winning.js"></script>
     <script src="assets/js/GameManager.js"></script>
+
+    
 </body>
 </html>

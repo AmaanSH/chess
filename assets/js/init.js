@@ -12,6 +12,13 @@ var ctx2 = chessCanvas.getContext("2d");
 var hightlightCanvas = document.getElementById("chessHighlight");
 var ctx3 = hightlightCanvas.getContext('2d');
 
+var endScreenCanvas = document.getElementById('endScreen');
+var endScreenCtx = endScreenCanvas.getContext('2d');
+
+document.querySelector("#endScreen").style.display = "none";
+
+var player1Turn = true;
+var player2Turn = false;
 
 // --------------------------
 
@@ -21,9 +28,6 @@ var chessBoardSquareB = '#F2E8DC';
 
 var chessPieceColourA = '#594C3C';
 var chessPieceColourB = '#A69B98';
-
-document.getElementById('pieceT1').style.backgroundColor = chessPieceColourA;
-document.getElementById('pieceT2').style.backgroundColor = chessPieceColourB;
 
 document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
 

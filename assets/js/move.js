@@ -15,11 +15,12 @@ function mousePos(event) {
     mouse.x = clickPosX
     mouse.y = clickPosY
 
+    updateTurnText();
+
     if (pieceClicked == false)  {
         pieceClicked = getPieceClicked();
 
-        if (pieceClicked != null) {
-            showPieceInfo();
+        if (pieceClicked != null && currentTurn(pieceClicked)) {
             getMovementParameters(pieceClicked);
             getTakingParameters(pieceClicked);
 
@@ -31,7 +32,6 @@ function mousePos(event) {
                 highlightTakeablePlaces(pieceClicked);
                 takeArray = getTakingParameters(pieceClicked);
             }
-
         } else {
             pieceClicked = false;
         }
@@ -47,7 +47,6 @@ function mousePos(event) {
 
         pieceClicked = false;
         takeArray = [];
-        clearPieceInfoText();
     }
 }
 
@@ -395,7 +394,6 @@ function validateMove(pieceClicked, posX, posY) {
                 ctx2.clearRect(gridArrayX[boardGridArray[posY][posX]], gridArrayY[boardGridArray[posY][posX]], gridSquareSize, gridSquareSize);
 
                 gridStatus[boardGridArray[posY][posX]] = false;
-                updateTakenPiecesText();
             }
             // if king is inside of takeArray
             if (checkMateChecked === false) {
