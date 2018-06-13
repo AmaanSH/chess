@@ -209,15 +209,15 @@ function getMovementParameters(piece){
         return gridStatus[value] !== true && gridStatus[value] !== undefined
     });
 
-    verticalCheck(piece);
-    horizontalCheck(piece);
+    verticalCheck(piece, availableMoves);
+    horizontalCheck(piece, availableMoves);
 
     if (piece.type === "BISHOP" || piece.type === "QUEEN") {
-        diagCheck(piece);
+        diagCheck(piece, availableMoves);
     }   
 }
 
-function verticalCheck(piece, bool) {
+function verticalCheck(piece, array) {
     var colLoop = 0;
 
     for (var i = 0 - piece.col; colLoop < 8; i++) {
@@ -226,17 +226,17 @@ function verticalCheck(piece, bool) {
         if (gridStatus[boardGridArray[piece.col + i][piece.row]])  {
             if (i < 0) {   
                 for (var j = 0; j < piece.col + i + 1; j++) {
-                    var index = availableMoves.indexOf(boardGridArray[j][piece.row]);
+                    var index = array.indexOf(boardGridArray[j][piece.row]);
                     if (index > -1){
-                        availableMoves.splice(index, 1);
+                        array.splice(index, 1);
                     }
                 }
             }
             if (i > 0) {   
                 for (var p = piece.col + i; p < 8; p++) {
-                    var index = availableMoves.indexOf(boardGridArray[p][piece.row]);
+                    var index = array.indexOf(boardGridArray[p][piece.row]);
                     if (index > -1) {
-                        availableMoves.splice(index, 1);
+                        array.splice(index, 1)
                     }
                 }
             }
@@ -244,7 +244,7 @@ function verticalCheck(piece, bool) {
     }
 }
 
-function horizontalCheck(piece){
+function horizontalCheck(piece, array){
     var rowLoop = 0;
 
     for (var j = 0 - piece.row; rowLoop < 8; j++){
@@ -252,19 +252,19 @@ function horizontalCheck(piece){
         if (gridStatus[boardGridArray[piece.col][piece.row + j]]) {
             if (j < 0) {   
                 for (var k = 0; k < piece.row + j + 1; k++) {
-                    var index = availableMoves.indexOf(boardGridArray[piece.col][k]);
+                    var index = array.indexOf(boardGridArray[piece.col][k]);
 
                     if (index > -1){
-                        availableMoves.splice(index, 1);
+                        array.splice(index, 1);
                     }
                 }
             }           
             if (j > 0) {   
                 for (var p =  piece.row + j; p < 8; p++) {
-                    var index = availableMoves.indexOf(boardGridArray[piece.col][p]);
+                    var index = array.indexOf(boardGridArray[piece.col][p]);
 
                     if (index > -1) {
-                        availableMoves.splice(index, 1);
+                        array.splice(index, 1);
                     }
                 }
             }
@@ -272,7 +272,7 @@ function horizontalCheck(piece){
     }
 }
 
-function diagCheck(piece) {
+function diagCheck(piece, array) {
     for (var q = 1; q < 8; q++) {
 
         //BUGS
@@ -290,10 +290,10 @@ function diagCheck(piece) {
                     // no need to keep checking since we're at the end of the board so just return
                     if (col < 8 && row < 8) {
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
@@ -309,10 +309,10 @@ function diagCheck(piece) {
                     if (col < 8 && row >= 0) {
 
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
@@ -331,10 +331,10 @@ function diagCheck(piece) {
                     if (col >= 0 && row >= 0) {
 
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
@@ -350,10 +350,10 @@ function diagCheck(piece) {
                     if (col >= 0 && row < 8) {
 
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
@@ -372,10 +372,10 @@ function diagCheck(piece) {
                     if (col >= 0 && row < 8) {
 
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
@@ -393,10 +393,10 @@ function diagCheck(piece) {
                     if (col < 8 && row >= 0) {
 
                         // removal of piece
-                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+                        var index = array.indexOf(boardGridArray[col][row]);
 
                         if (index > -1) {
-                            availableMoves.splice(index, 1);
+                            array.splice(index, 1);
                         }
                     }
                 }
