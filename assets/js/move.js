@@ -148,7 +148,7 @@ function addAllMovesForPieceToArray(piece) {
                 allMovesForPiece.push(row[rowType - down] + (posX + 2));
 
                 // 2 down movements
-                allMovesForPiece.push(row[rowType - (down + 1)] + posX);
+                allMovesForPiece.push(row[rowType - down] + posX);
 
                 // 1 down movement on the edges
                 allMovesForPiece.push(row[rowType - 2] + (posX - 1));
@@ -174,6 +174,9 @@ function addAllMovesForPieceToArray(piece) {
                 // right up movement on the edges
                 allMovesForPiece.push(row[rowType + 2] + (posX - 1));
                 allMovesForPiece.push(row[rowType + 2] + (posX + 1));
+
+                allMovesForPiece.push(row[rowType + up] + posX);
+                allMovesForPiece.push(row[rowType + (up + 1)] + posX);
             }
             else {
                 allMovesForPiece.push(row[rowType + up] + posX);
@@ -214,7 +217,7 @@ function getMovementParameters(piece){
     }   
 }
 
-function verticalCheck(piece) {
+function verticalCheck(piece, bool) {
     var colLoop = 0;
 
     for (var i = 0 - piece.col; colLoop < 8; i++) {
@@ -255,7 +258,7 @@ function horizontalCheck(piece){
                         availableMoves.splice(index, 1);
                     }
                 }
-            }
+            }           
             if (j > 0) {   
                 for (var p =  piece.row + j; p < 8; p++) {
                     var index = availableMoves.indexOf(boardGridArray[piece.col][p]);
@@ -275,7 +278,6 @@ function diagCheck(piece) {
         //BUGS
         // If piece is one spot down the blocking checks do not work on the left -- FIXED
         // Team2 pieces start on the other side of board, blocking checks do not work initially -- FIXED
-
 
         // right down
         if (q < 7 - piece.row && q <= 7 - piece.col) {
@@ -435,7 +437,6 @@ function validateMove(pieceClicked, posX, posY) {
             if (takeableSpaces == moveRow + posX && checkIfPieceCanBeTaken(pieceClicked)) {
                 pieceClicked.inTake = true;
                 ctx2.clearRect(gridArrayX[boardGridArray[posY][posX]], gridArrayY[boardGridArray[posY][posX]], gridSquareSize, gridSquareSize);
-
                 gridStatus[boardGridArray[posY][posX]] = false;
             }
             // if king is inside of takeArray
