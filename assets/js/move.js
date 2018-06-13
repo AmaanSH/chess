@@ -29,8 +29,8 @@ function mousePos(event) {
             }
 
             if (getTakingParameters(pieceClicked) !== null) {
-                highlightTakeablePlaces(pieceClicked);
                 takeArray = getTakingParameters(pieceClicked);
+                highlightTakeablePlaces(pieceClicked);            
             }
         } else {
             pieceClicked = false;
@@ -46,6 +46,7 @@ function mousePos(event) {
         ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
 
         pieceClicked = false;
+        beingBlocked = false;
         takeArray = [];
     }
 }
@@ -228,7 +229,7 @@ function verticalCheck(piece, array) {
                 for (var j = 0; j < piece.col + i + 1; j++) {
                     var index = array.indexOf(boardGridArray[j][piece.row]);
                     if (index > -1){
-                        array.splice(index, 1);
+                        array.splice(index, 1);                        
                     }
                 }
             }
@@ -236,7 +237,7 @@ function verticalCheck(piece, array) {
                 for (var p = piece.col + i; p < 8; p++) {
                     var index = array.indexOf(boardGridArray[p][piece.row]);
                     if (index > -1) {
-                        array.splice(index, 1)
+                        array.splice(index, 1);                       
                     }
                 }
             }

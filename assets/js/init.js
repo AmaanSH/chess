@@ -19,6 +19,7 @@ document.querySelector("#endScreen").style.display = "none";
 
 var player1Turn = true;
 var player2Turn = false;
+var beingBlocked = false;
 
 // --------------------------
 

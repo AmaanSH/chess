@@ -11,7 +11,8 @@
 // BUG LIST
 // Other side blocking check issue -- DONE
 // Knight turns on team 2 are missing bottom 2 movements -- DONE
-// Check mate checks need adjusting -- IN PROGRESS
+// Check mate checks need adjusting -- 
+// Takeable spaces needs to also use blocking checks -- IN PROGRESS
 
 function allTakingParameters(piece) {
     var posX = clickPosX / gridSquareSize;
@@ -152,6 +153,9 @@ function getTakingParameters(piece) {
             }
         }
     }
+    // TODO
+    // use blocking check
+
     return taking;
 }
 
@@ -159,10 +163,9 @@ function highlightTakeablePlaces(piece) {
 
     // BUGS
     // Your own pieces are being highlighted as takeable, but not possible -- FIXED (getTakingParameters)
-
-    if (getTakingParameters(piece).length > 0) {
-        for (var i = 0; i <= getTakingParameters(piece).length; i++) {
-            drawHighlight('rgba(255, 0, 0, 0.2)', getTakingParameters(piece)[i]);
+    if (takeArray.length > 0) {
+        for (var i = 0; i <= takeArray.length; i++) {
+            drawHighlight('rgba(255, 0, 0, 0.2)', takeArray[i]);
         }
     }
 }
