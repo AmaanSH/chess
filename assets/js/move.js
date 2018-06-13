@@ -271,6 +271,12 @@ function horizontalCheck(piece){
 
 function diagCheck(piece) {
     for (var q = 1; q < 8; q++) {
+
+        //BUGS
+        // If piece is one spot down the blocking checks do not work on the left -- FIXED
+        // Team2 pieces start on the other side of board, blocking checks do not work initially -- FIXED
+
+
         // right down
         if (q < 7 - piece.row && q <= 7 - piece.col) {
             if (gridStatus[boardGridArray[piece.col + q][piece.row + q]]) {
@@ -281,6 +287,25 @@ function diagCheck(piece) {
 
                     // no need to keep checking since we're at the end of the board so just return
                     if (col < 8 && row < 8) {
+                        // removal of piece
+                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+
+                        if (index > -1) {
+                            availableMoves.splice(index, 1);
+                        }
+                    }
+                }
+            }
+            // left down
+            if (gridStatus[boardGridArray[piece.col + q][piece.row - q]]) {
+                for (var i = 0; i < 8; i++) {
+                    // Looks in front of piece that piecePos is referring to start removing
+                    var col = piece.col + q + i;
+                    var row = piece.row - q - i;
+
+                    // no need to keep checking since we're at the end of the board so just return
+                    if (col < 8 && row >= 0) {
+
                         // removal of piece
                         var index = availableMoves.indexOf(boardGridArray[col][row]);
 
@@ -302,6 +327,25 @@ function diagCheck(piece) {
 
                     // no need to keep checking since we're at the end of the board
                     if (col >= 0 && row >= 0) {
+
+                        // removal of piece
+                        var index = availableMoves.indexOf(boardGridArray[col][row]);
+
+                        if (index > -1) {
+                            availableMoves.splice(index, 1);
+                        }
+                    }
+                }
+            }
+
+            if (gridStatus[boardGridArray[piece.col - q][piece.row + q]]) {
+                for (var i = 0; i < 8; i++) {
+                    // Looks in front of piece that piecePos is referring to start removing
+                    var col = piece.col - q - i;
+                    var row = piece.row + q + i;
+
+                    // no need to keep checking since we're at the end of the board so just return
+                    if (col >= 0 && row < 8) {
 
                         // removal of piece
                         var index = availableMoves.indexOf(boardGridArray[col][row]);
@@ -335,8 +379,7 @@ function diagCheck(piece) {
                 }
             }
         }
-
-        // left down
+  
         if (q <= 7 - piece.col && q >= piece.col) {
             if (gridStatus[boardGridArray[piece.col + q][piece.row - q]]) {
                 for (var i = 0; i < 8; i++) {
