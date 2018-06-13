@@ -9,9 +9,9 @@
 // Change Captured flag to true and in play false -- DONE
 
 // BUG LIST
-// Other side blocking check issue --
-// Check mate checks need adjusting --
-// Knight turns on team 2 are missing bottom 2 movements --
+// Other side blocking check issue -- DONE
+// Knight turns on team 2 are missing bottom 2 movements -- DONE
+// Check mate checks need adjusting -- IN PROGRESS
 
 function allTakingParameters(piece) {
     var posX = clickPosX / gridSquareSize;
@@ -40,8 +40,13 @@ function allTakingParameters(piece) {
         }
         for (var down = 0; down <= takeParams.DOWN; down++) {
             if (piece.type === "KNIGHT") {
-                allTaking.push(row[rowType + down] + (posX - 2));
-                allTaking.push(row[rowType + down] + (posX + 2));
+                // sides one down
+                allTaking.push(row[rowType + 1] + (posX - 2));
+                allTaking.push(row[rowType + 1] + (posX + 2));
+
+                // bottom section take pos
+                allTaking.push(row[rowType + 2] + (posX + 1));
+                allTaking.push(row[rowType + 2] + (posX - 1));
             } else {
                 allTaking.push(row[rowType + down] + posX);
             }         
@@ -49,19 +54,24 @@ function allTakingParameters(piece) {
 
         for (var up = 0; up <= takeParams.UP; up++) {
             if (piece.type === "KNIGHT") {
-                allTaking.push(row[rowType - up] + (posX + 2));
-                allTaking.push(row[rowType - up] + (posX - 2));
+                allTaking.push(row[rowType - 1] + (posX + 2));
+                allTaking.push(row[rowType - 1] + (posX - 2));
+
+                // bottom section take pos
+                allTaking.push(row[rowType - 2] + (posX + 1));
+                allTaking.push(row[rowType - 2] + (posX - 1));
+
             } else {
                 allTaking.push(row[rowType - up] + posX);
             }           
         }
 
         for (var right = 0; right <= takeParams.RIGHT; right++) {
-            allTaking.push(row[rowType] + (posX + right));
+            allTaking.push(row[rowType] + (posX + right));         
         }
 
         for (var left = 0; left <= takeParams.LEFT; left++) {
-            allTaking.push(row[rowType] + (posX - left));
+            allTaking.push(row[rowType] + (posX - left));          
         }
     } else {
         if (takeParams.DIAG > 0) {
@@ -78,11 +88,31 @@ function allTakingParameters(piece) {
             }
         }
         for (var down = 0; down <= takeParams.DOWN; down++) {
-            allTaking.push(row[rowType - down] + posX);
+            if (piece.type === "KNIGHT") {
+                // sides one down
+                allTaking.push(row[rowType - 1] + (posX - 2));
+                allTaking.push(row[rowType - 1] + (posX + 2));
+
+                // bottom section take pos
+                allTaking.push(row[rowType - 2] + (posX + 1));
+                allTaking.push(row[rowType - 2] + (posX - 1));
+            } else {
+                allTaking.push(row[rowType - down] + posX);
+            }            
         }
 
         for (var up = 0; up <= takeParams.DOWN; up++) {
-            allTaking.push(row[rowType + up] + posX);
+            if (piece.type === "KNIGHT") {
+                allTaking.push(row[rowType + 1] + (posX + 2));
+                allTaking.push(row[rowType + 1] + (posX - 2));
+
+                // bottom section take pos
+                allTaking.push(row[rowType + 2] + (posX + 1));
+                allTaking.push(row[rowType + 2] + (posX - 1));
+
+            } else {
+                allTaking.push(row[rowType + up] + posX)
+            } 
         }
 
         for (var right = 0; right <= takeParams.RIGHT; right++) {
@@ -103,15 +133,16 @@ function getTakingParameters(piece) {
         return gridStatus[value] !== undefined && value !== boardGridArray[piece.col][piece.row] && gridStatus[value] !== false;
     });
 
-    // check the contents of the takearray
-    // find what pieces are at those spaces
-    // if the same team, remove from array
+    // check the contents of the takearray -- DONE
+    // find what pieces are at those spaces -- DONE
+    // if the same team, remove from array -- DONE
+
     if (taking.length > 0) {
         for (var j = 0; j < taking.length; j++) {
             for (var i = 0; i < piecesArray.length; i++) {       
                 var spaceToCheck = boardGridArray[piecesArray[i].col][piecesArray[i].row];
 
-                // remove as same team
+                // same team check. if true, remove
                 if (spaceToCheck === taking[j]) {
                     if (piecesArray[i].team1 === piece.team1) {
                         taking.splice(j, 1);  
@@ -121,14 +152,13 @@ function getTakingParameters(piece) {
             }
         }
     }
-
     return taking;
 }
 
 function highlightTakeablePlaces(piece) {
 
     // BUGS
-    // Your own pieces are being highlighted as takeable, but not possible
+    // Your own pieces are being highlighted as takeable, but not possible -- FIXED (getTakingParameters)
 
     if (getTakingParameters(piece).length > 0) {
         for (var i = 0; i <= getTakingParameters(piece).length; i++) {
@@ -143,6 +173,7 @@ function checkIfPieceCanBeTaken(piece) {
         if (mouse.x >= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.x <= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
             // checks to see if the mouseY position matches with the index in the pieces array
             if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {         
+                
                 piecesArray[i].CAPTURED = true;
                 piece.piecesTaken++    
                                  

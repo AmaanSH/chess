@@ -23,8 +23,7 @@ function currentTurn(piece) {
                 player1Turn = true;
                 player2Turn = false;
             }
-        };
-        
+        };       
         return true; 
     }
 }

@@ -149,8 +149,8 @@ Piece.prototype.taking = function () {
         // refers too how many spaces the code should look through to check if taking requirements met
         this.TAKE_UP = 1;
         this.TAKE_DOWN = 1;
-        this.TAKE_LEFT = 1;
-        this.TAKE_RIGHT = 1;
+        this.TAKE_LEFT = 0;
+        this.TAKE_RIGHT = 0;
         this.TAKE_DIAG = 0;
 
         return { UP: this.TAKE_UP, DOWN: this.TAKE_DOWN, LEFT: this.TAKE_LEFT, RIGHT: this.TAKE_RIGHT, DIAG: this.TAKE_DIAG };
