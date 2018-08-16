@@ -47,6 +47,7 @@ var piecesArray = [];
 var newPiecesArray = [];
 var availableMoves = [];
 var takeArray = [];
+var kingTakeableSpaces = [];
 
 var row = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
