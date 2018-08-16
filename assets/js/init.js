@@ -1,7 +1,8 @@
 'use strict';
 
-// --------------------------
+// GLOABAL SPACE NEEDS SORTING OUT!! 
 
+// --------------------------
 
 var canvas = document.getElementById("chessBoard");
 var ctx = canvas.getContext("2d");
@@ -26,9 +27,9 @@ var beingBlocked = false;
 
 var chessBoardSquareA = '#D9D1C7';
 var chessBoardSquareB = '#F2E8DC';
-
 var chessPieceColourA = '#594C3C';
 var chessPieceColourB = '#A69B98';
+var chessPieceColourB = 'black';
 
 document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
 
@@ -37,7 +38,6 @@ var score1 = 0;
 var score2 = 0;
 
 const gridSquareSize = 75;
-
 
 // --------------------------
 
@@ -48,6 +48,7 @@ var piecesArray = [];
 var newPiecesArray = [];
 var availableMoves = [];
 var takeArray = [];
+var kingTakeableSpaces = [];
 
 var row = ["A", "B", "C", "D", "E", "F", "G", "H"];
 

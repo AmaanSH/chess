@@ -29,12 +29,11 @@ function currentTurn(piece) {
 }
 
 function endGame() {
-
     document.getElementById('turn').textContent = "END OF GAME";
     document.querySelector("#endScreen").style.display = "block";
     
     endScreenCtx.fillStyle = "#736453";
-    endScreenCtx.fillRect(0, 0, 600, 600)
+    endScreenCtx.fillRect(0, 0, 600, 600);
 
     var titleFont = "bold 50px Arial";
     var textFont = "bold 20px Arial";

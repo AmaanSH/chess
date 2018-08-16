@@ -40,7 +40,7 @@ function mousePos(event) {
         if (pieceClicked.type === "KING" && pieceClicked.IN_CHECK) {
             hasKingMoved(pieceClicked.col, pieceClicked.row, clickPosX, clickPosY);
         }
-
+     
         movePiece(pieceClicked, clickPosX, clickPosY);
 
         ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
@@ -55,9 +55,11 @@ function getPieceClicked() {
     for (var i = 0; i < piecesArray.length; i++) {
         // checks to see if the mouseX position matches with the index stated in the piecesArray 
         if (mouse.x >= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.x <= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
+
             // checks to see if the mouseY position matches with the index in the pieces array
-            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]){
-                console.log('Piece: ' + piecesArray[i].id + ' Pos: ' + boardGridArray[piecesArray[i].col][piecesArray[i].row] + ' Team1: ' + piecesArray[i].team1)
+            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
+
+                //console.log('Piece: ' + piecesArray[i].id + ' Pos: ' + boardGridArray[piecesArray[i].col][piecesArray[i].row] + ' Team1: ' + piecesArray[i].team1)
                 return piecesArray[i]
             }
         }
@@ -69,11 +71,11 @@ function addAllMovesForPieceToArray(piece) {
     var posY = clickPosY / gridSquareSize;
 
     var moveParams = piece.movement();
-
-    var allMovesForPiece = [];
-   
+ 
     // gets index of the piececlick col inside of row array
     var rowType = piece.col;
+
+    var allMovesForPiece = [];
 
     if (piece.team1) {
         for (var down = 0; down <= moveParams.down; down++) {
@@ -210,34 +212,153 @@ function getMovementParameters(piece){
         return gridStatus[value] !== true && gridStatus[value] !== undefined
     });
 
-    verticalCheck(piece, availableMoves);
-    horizontalCheck(piece, availableMoves);
+    verticalCheck(piece, availableMoves, "moves");
+    horizontalCheck(piece, availableMoves, "moves");
 
     if (piece.type === "BISHOP" || piece.type === "QUEEN") {
         diagCheck(piece, availableMoves);
-    }   
+    }
 }
 
-function verticalCheck(piece, array) {
+function verticalCheck(piece, array, type) {
     var colLoop = 0;
 
     for (var i = 0 - piece.col; colLoop < 8; i++) {
         colLoop++;
-        // up check
-        if (gridStatus[boardGridArray[piece.col + i][piece.row]])  {
+        if (gridStatus[boardGridArray[piece.col + i][piece.row]]) {
+            // up check
             if (i < 0) {   
                 for (var j = 0; j < piece.col + i + 1; j++) {
+                    // where equal to true
                     var index = array.indexOf(boardGridArray[j][piece.row]);
-                    if (index > -1){
-                        array.splice(index, 1);                        
+
+                    if (index > -1 && type !== "take") {
+                        array.splice(index, 1);
+                    }
+                    // if taking & index = taking piece
+                    if (type === "take" && index > -1) {     
+                        var colCheck = j - 1;
+                        var rowCheck = piece.row
+                        for (var check = 0; check < piecesArray.length; check++) {
+                            if (piecesArray[check].col === colCheck && piecesArray[check].row === rowCheck) {
+                                if (piecesArray[check].team1 === piece.team1) {
+                                    console.log(piece.id + " is being blocked by own team piece: " + piecesArray[check].id + " no pieces can be taken")
+
+                                    // remove all takeable spots in array
+                                    array.splice(0, array.length)
+                                    return
+                                }
+                                if (piecesArray[check].team1 !== piece.team1) {
+                                    console.log(array);
+                                    for (var w = 0; w < 8; w++) {
+                                        var check1 = colCheck + w;
+                                        for (var arrayCheck = 0; arrayCheck < piecesArray.length; arrayCheck++) {
+                                            if (check1 > 0 && boardGridArray[check1][piece.row] === boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] && boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] !== boardGridArray[piece.col][piece.row]) {
+                                                if (piecesArray[arrayCheck].team1 === piece.team1) {
+                                                    if (piecesArray[arrayCheck].col < piece.col) {
+                                                        console.log('NO BLOCK')
+                                                        return
+                                                    } else {
+                                                        console.log("SAME TEAM NO TAKE. PIECE DETECTED: " + piecesArray[arrayCheck].team1 + " " + piecesArray[arrayCheck].id);
+                                                        array.splice(0, array.length);
+                                                        return;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (gridStatus[boardGridArray[colCheck][rowCheck]] == false) {
+                                for (var e = 0; e < 8; e++) {
+                                    var check1 = colCheck + e;
+                                    for (var arrayCheck = 0; arrayCheck < piecesArray.length; arrayCheck++) {
+                                        if (check1 > 0 && boardGridArray[check1][piece.row] === boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] && boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] !== boardGridArray[piece.col][piece.row]) {
+                                            if (piecesArray[arrayCheck].team1 === piece.team1) {
+                                                if (piecesArray[arrayCheck].col < piece.col) {
+                                                    return
+                                                } else {
+                                                    console.log("SAME TEAM NO TAKE. PIECE DETECTED: " + piecesArray[arrayCheck].team1 + " " + piecesArray[arrayCheck].id);
+                                                    array.splice(0, array.length);
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
+            // down check
             if (i > 0) {   
                 for (var p = piece.col + i; p < 8; p++) {
                     var index = array.indexOf(boardGridArray[p][piece.row]);
-                    if (index > -1) {
+                    if (index > -1 && type !== "take") {
                         array.splice(index, 1);                       
+                    }
+
+                    var colCheck = p + 1;
+                    var rowCheck = piece.row;
+                    if (type === "take" && index > -1) {      
+                        for (var check = 0; check < piecesArray.length; check++) {
+
+                           /// console.log("Piece being checked: " + boardGridArray[p][piece.row])
+                           // console.log("colCheck: " + colCheck)
+                           // console.log("check: " + check)
+
+                            // if the piece in the array equals the piece we're checking
+                            if (piecesArray[check].col === colCheck && piecesArray[check].row === rowCheck) {
+                                // same team?
+                                if (piecesArray[check].team1 === piece.team1) {
+                                    console.log(piece.id + " is being blocked by own team piece: " + piecesArray[check].id + " no pieces can be taken")
+                                    array.splice(0, array.length)
+                                    return
+                                }
+
+                                // not the same team?
+                                if (piecesArray[check].team1 !== piece.team1) {
+                                    console.log(array)
+                                    for (var y = 0; y < 8; y++) {
+                                        var check1 = colCheck - y;
+                                        for (var arrayCheck = 0; arrayCheck < piecesArray.length; arrayCheck++) {
+                                            if (check1 > 0 && boardGridArray[check1][piece.row] === boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] && boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] !== boardGridArray[piece.col][piece.row]) {
+                                                if (piecesArray[arrayCheck].team1 === piece.team1) {
+                                                    if (piecesArray[arrayCheck].col < piece.col) {
+                                                        return
+                                                    } else {
+                                                        console.log("SAME TEAM NO TAKE. PIECE DETECTED: " + piecesArray[arrayCheck].id + " IS BLOCKING: " + piece.id);
+                                                        array.splice(0, array.length);
+                                                        return
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (gridStatus[boardGridArray[colCheck][rowCheck]] == false) {
+                                console.log(array);
+                                for (var o = 0; o < 8; o++) {
+                                    var check1 = colCheck - o;
+                                    for (var arrayCheck = 0; arrayCheck < piecesArray.length; arrayCheck++) {
+                                        if (check1 > 0 && boardGridArray[check1][piece.row] === boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] && boardGridArray[piecesArray[arrayCheck].col][piecesArray[arrayCheck].row] !== boardGridArray[piece.col][piece.row]) {
+                                            if (piecesArray[arrayCheck].team1 === piece.team1) {
+                                                if (piecesArray[arrayCheck].col < piece.col) {
+                                                    return
+                                                } else {
+                                                    console.log("SAME TEAM NO TAKE. PIECE DETECTED: " + piecesArray[arrayCheck].team1 + " " + piecesArray[arrayCheck].id);
+                                                    array.splice(0, array.length);
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }             
                     }
                 }
             }
@@ -245,9 +366,8 @@ function verticalCheck(piece, array) {
     }
 }
 
-function horizontalCheck(piece, array){
+function horizontalCheck(piece, array, type){
     var rowLoop = 0;
-
     for (var j = 0 - piece.row; rowLoop < 8; j++){
         rowLoop++;
         if (gridStatus[boardGridArray[piece.col][piece.row + j]]) {
@@ -255,8 +375,31 @@ function horizontalCheck(piece, array){
                 for (var k = 0; k < piece.row + j + 1; k++) {
                     var index = array.indexOf(boardGridArray[piece.col][k]);
 
-                    if (index > -1){
+                    if (index > -1 && type !== "check"){
                         array.splice(index, 1);
+                    }
+                }
+
+                if (type === "take") {
+                    //var pieceToCheck = getPieceClicked();
+
+                    var colCheck = piece.col
+                    var rowCheck = piece.row + j
+
+                    for (var check = 0; check < piecesArray.length; check++) {
+                        if (piecesArray[check].col === colCheck && piecesArray[check].row === rowCheck) {
+                            if (piecesArray[check].team1 === piece.team1) {
+                                // remove all takeable spots in array
+                                array.splice(0, array.length);
+                                return
+                            }
+                            if (piecesArray[check].team1 !== piece.team1) {
+                                console.log(array)
+                                var length = array.length - index;
+                                array.splice(index + 1, length);
+                                return
+                            }
+                        }
                     }
                 }
             }           
@@ -264,8 +407,30 @@ function horizontalCheck(piece, array){
                 for (var p =  piece.row + j; p < 8; p++) {
                     var index = array.indexOf(boardGridArray[piece.col][p]);
 
-                    if (index > -1) {
+                    if (index > -1 && type !== "take") {
                         array.splice(index, 1);
+                    }
+                    if (type === "take") {
+                        //var pieceToCheck = getPieceClicked();
+
+                        var colCheck = piece.col;
+                        var rowCheck = piece.row - j;
+
+                        for (var check = 0; check < piecesArray.length; check++) {
+                            if (piecesArray[check].col === colCheck && piecesArray[check].row === rowCheck) {
+                                if (piecesArray[check].team1 === piece.team1) {
+                                    console.log(piece.id + " is being blocked by own team piece: " + piecesArray[check].id + " no pieces can be taken")
+                                    // remove all takeable spots in array
+                                    array.splice(0, array.length)
+                                    return
+                                }
+                                if (piecesArray[check].team1 !== piece.team1) {
+                                    var length = array.length - index;
+                                    array.splice(index + 1, length);
+                                    return
+                                }
+                            }
+                        }
                     }
                 }
             }
