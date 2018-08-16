@@ -24,8 +24,8 @@ var beingBlocked = false;
 
 // --------------------------
 
-var chessBoardSquareA = 'black';
-var chessBoardSquareB = 'white';
+var chessBoardSquareA = '#BEC6CA';
+var chessBoardSquareB = '#D7D8D9';
 
 var chessPieceColourA = '#464A49';
 var chessPieceColourB = 'black';
