@@ -28,9 +28,9 @@ function mousePos(event) {
                 highlightPlacesToMove(); 
             }
 
-           // if (getTakingParameters(pieceClicked) !== null) {
-            //    highlightTakeablePlaces(pieceClicked);            
-           // }
+            if (getTakingParameters(pieceClicked) !== null) {
+                highlightTakeablePlaces(pieceClicked);            
+            }
         } else {
             pieceClicked = false;
         }
@@ -78,7 +78,6 @@ function addAllMovesForPieceToArray(piece) {
         allDiagMoves: []
     }
  
-    // gets index of the piececlick col inside of row array
     var rowType = piece.col;
 
     if (piece.team1) {
@@ -236,25 +235,26 @@ function getMovementParameters(piece){
     diagMovement.sort();
 
     if (upMovement.length > 0) {
-        verticalCheck(piece, upMovement);
+        blockingChecks(piece, upMovement);
     }
 
     if (downMovement.length > 0) {
-        verticalCheck(piece, downMovement);
+        blockingChecks(piece, downMovement);
     }
 
     if (leftMovement.length > 0) {
-        horizontalCheck(piece, leftMovement);
+        blockingChecks(piece, leftMovement);
     }
 
     if (rightMovement.length > 0) {
-        horizontalCheck(piece, rightMovement);
+        blockingChecks(piece, rightMovement);
+    }
+
+    if (diagMovement.length > 0) {
+        // diagnal check - special check
+        // need to seperate all diagnals into it's own directions
     }
     
-   // if (piece.diag > 0) {
-   //     diagCheckdiagCheck(piece, diagTaking, "take")
-   // }
-
     if (rightMovement.length > 0) {
         for (var i = 0; i < rightMovement.length; i++) {
             availableMoves.push(rightMovement[i]);
@@ -286,7 +286,7 @@ function getMovementParameters(piece){
     }
 }
 
-function verticalCheck(piece, array) {
+function blockingChecks(piece, array) {
     // Check the array being passed in
     // if a piece is on spot, remove from that piece downwards
     for (var i = 0; i < array.length; i++) {
@@ -296,14 +296,6 @@ function verticalCheck(piece, array) {
         }
     }
  }
-
-function horizontalCheck(piece, array) {
-  
-}
-
-function diagCheck(piece, array) {
-
-}
 
 function highlightPlacesToMove() {
     ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height) 
