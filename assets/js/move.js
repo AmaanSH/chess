@@ -28,9 +28,9 @@ function mousePos(event) {
                 highlightPlacesToMove(); 
             }
 
-            if (getTakingParameters(pieceClicked) !== null) {
-                highlightTakeablePlaces(pieceClicked);            
-            }
+            //if (getTakingParameters(pieceClicked) !== null) {
+            //    highlightTakeablePlaces(pieceClicked);            
+            //}
         } else {
             pieceClicked = false;
         }
@@ -89,7 +89,6 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-
             // knight has special movement, needs to look more like an L
             if (piece.type === "KNIGHT") {
 
@@ -241,10 +240,6 @@ function getMovementParameters(piece){
     diagLeftMovement = removeValues(diagLeftMovement, addAllMovesForPieceToArray(piece).allDiagLFTMoves, piece);
     diagLeftDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagLFTDWNMoves, piece);
     diagRightDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
-
-    // puts array into order
-    rightMovement.sort();
-    downMovement.sort();
 
     // puts the movements from the array into availableMoves once blocking checks are taken into account
     addValidPiecesMovementsToArray(piece, leftMovement);
