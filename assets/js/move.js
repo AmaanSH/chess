@@ -75,7 +75,11 @@ function addAllMovesForPieceToArray(piece) {
         allRightMoves: [],
         allUpMoves: [],
         allDownMoves: [],
-        allDiagMoves: []
+
+        allDiagLFTMoves: [],
+        allDiagRGTMoves: [],
+        allDiagRGTDWNMoves: [],
+        allDiagLFTDWNMoves: []
     }
  
     var rowType = piece.col;
@@ -135,10 +139,10 @@ function addAllMovesForPieceToArray(piece) {
         }
 
         for (var diag = 0; diag <= moveParams.diag; diag++) {
-            allMoveParams.allDiagMoves.push(row[rowType + diag] + (posX + diag));
-            allMoveParams.allDiagMoves.push(row[rowType - diag] + (posX + diag));
-            allMoveParams.allDiagMoves.push(row[rowType + diag] + (posX - diag));
-            allMoveParams.allDiagMoves.push(row[rowType - diag] + (posX - diag));
+            allMoveParams.allDiagRGTDWNMoves.push(row[rowType + diag] + (posX + diag));
+            allMoveParams.allDiagLFTDWNMoves.push(row[rowType - diag] + (posX + diag));
+            allMoveParams.allDiagRGTMoves.push(row[rowType + diag] + (posX - diag));
+            allMoveParams.allDiagLFTMoves.push(row[rowType - diag] + (posX - diag));
         }
     }
     if (piece.team1 !== true) {
@@ -165,7 +169,7 @@ function addAllMovesForPieceToArray(piece) {
                 allMoveParams.allDownMoves.push(row[rowType - down] + posX);
             }          
         }
-
+        // Bug: Diaganol up movement issue when piece is in the last row
         for (var up = 0; up <= moveParams.up; up++) {
             // knight has special movement, needs to look more like an L
             if (piece.type === "KNIGHT") {
@@ -198,10 +202,10 @@ function addAllMovesForPieceToArray(piece) {
         }
 
         for (var diag = 0; diag <= moveParams.diag; diag++) {
-            allMoveParams.allDiagMoves.push(row[rowType + diag] + (posX + diag));
-            allMoveParams.allDiagMoves.push(row[rowType - diag] + (posX + diag));
-            allMoveParams.allDiagMoves.push(row[rowType + diag] + (posX - diag));
-            allMoveParams.allDiagMoves.push(row[rowType - diag] + (posX - diag));
+            allMoveParams.allDiagRGTDWNMoves.push(row[rowType + diag] + (posX + diag));
+            allMoveParams.allDiagLFTDWNMoves.push(row[rowType - diag] + (posX + diag));
+            allMoveParams.allDiagRGTMoves.push(row[rowType + diag] + (posX - diag));
+            allMoveParams.allDiagLFTMoves.push(row[rowType - diag] + (posX - diag));
         }
     }
     return allMoveParams;
@@ -220,7 +224,11 @@ function getMovementParameters(piece){
     var rightMovement = [];
     var upMovement = [];
     var downMovement = [];
-    var diagMovement = [];
+
+    var diagRightMovement = [];
+    var diagLeftMovement = [];
+    var diagRightDownMovement = [];
+    var diagLeftDownMovement = [];
 
     availableMoves = [];
 
@@ -228,33 +236,39 @@ function getMovementParameters(piece){
     rightMovement = removeValues(rightMovement, addAllMovesForPieceToArray(piece).allRightMoves, piece);
     upMovement = removeValues(upMovement, addAllMovesForPieceToArray(piece).allUpMoves, piece);
     downMovement = removeValues(downMovement, addAllMovesForPieceToArray(piece).allDownMoves, piece);
-    diagMovement = removeValues(diagMovement, addAllMovesForPieceToArray(piece).allDiagMoves, piece);
+
+    diagRightMovement = removeValues(diagRightMovement, addAllMovesForPieceToArray(piece).allDiagRGTMoves, piece);
+    diagLeftMovement = removeValues(diagLeftMovement, addAllMovesForPieceToArray(piece).allDiagLFTMoves, piece);
+    diagLeftDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagLFTDWNMoves, piece);
+    diagRightDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
 
     rightMovement.sort();
     downMovement.sort();
-    diagMovement.sort();
 
     if (upMovement.length > 0) {
         blockingChecks(piece, upMovement);
     }
-
     if (downMovement.length > 0) {
         blockingChecks(piece, downMovement);
     }
-
     if (leftMovement.length > 0) {
         blockingChecks(piece, leftMovement);
     }
-
     if (rightMovement.length > 0) {
         blockingChecks(piece, rightMovement);
     }
-
-    if (diagMovement.length > 0) {
-        // diagnal check - special check
-        // need to seperate all diagnals into it's own directions
+    if (diagRightMovement.length > 0) {
+        blockingChecks(piece, diagRightMovement);
     }
-    
+    if (diagLeftMovement.length > 0) {
+        blockingChecks(piece, diagLeftMovement);
+    }
+    if (diagRightDownMovement.length > 0) {
+        blockingChecks(piece, diagRightDownMovement);
+    }   
+    if (diagLeftDownMovement.length > 0) {
+        blockingChecks(piece, diagLeftDownMovement);
+    }
     if (rightMovement.length > 0) {
         for (var i = 0; i < rightMovement.length; i++) {
             availableMoves.push(rightMovement[i]);
@@ -266,22 +280,35 @@ function getMovementParameters(piece){
             availableMoves.push(leftMovement[i]);
         } 
     }
-
     if (upMovement.length > 0) {
         for (var i = 0; i < upMovement.length; i++) {
             availableMoves.push(upMovement[i]);
         } 
     }
-
     if (downMovement.length > 0) {
         for (var i = 0; i < downMovement.length; i++) {
             availableMoves.push(downMovement[i]);
         } 
     }
 
-    if (diagMovement.length > 0) {
-        for (var i = 0; i < diagMovement.length; i++) {
-            availableMoves.push(diagMovement[i]);
+    if (diagRightMovement.length > 0) {
+        for (var i = 0; i < diagRightMovement.length; i++) {
+            availableMoves.push(diagRightMovement[i]);
+        } 
+    }
+    if (diagLeftMovement.length > 0) {
+        for (var i = 0; i < diagLeftMovement.length; i++) {
+            availableMoves.push(diagLeftMovement[i]);
+        } 
+    }
+    if (diagRightDownMovement.length > 0) {
+        for (var i = 0; i < diagRightDownMovement.length; i++) {
+            availableMoves.push(diagRightDownMovement[i]);
+        } 
+    }
+    if (diagLeftDownMovement.length > 0) {
+        for (var i = 0; i < diagLeftDownMovement.length; i++) {
+            availableMoves.push(diagLeftDownMovement[i]);
         } 
     }
 }
