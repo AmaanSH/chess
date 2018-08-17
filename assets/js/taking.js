@@ -170,9 +170,6 @@ function getTakingParameters(piece) {
     downTaking = removeBadValuesFromArray(downTaking, allTakingParameters(piece).allDownTaking, piece);
     diagTaking = removeBadValuesFromArray(diagTaking, allTakingParameters(piece).allDiagTaking, piece);
 
-    // TODO
-    // use blocking check
-
     if (upTaking.length > 0) {
         blockingChecks(piece, upTaking);
     }
@@ -189,10 +186,6 @@ function getTakingParameters(piece) {
         blockingChecks(piece, rightTaking);
     }
     
-   // if (piece.diag > 0) {
-   //     diagCheckdiagCheck(piece, diagTaking, "take")
-   // }
-
     if (rightTaking.length > 0) {
         taking.push(rightTaking);
     }
