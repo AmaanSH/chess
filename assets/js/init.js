@@ -24,10 +24,10 @@ var beingBlocked = false;
 
 // --------------------------
 
-var chessBoardSquareA = '#BEC6CA';
-var chessBoardSquareB = '#D7D8D9';
+var chessBoardSquareA = '#D9D1C7';
+var chessBoardSquareB = '#F2E8DC';
 
-var chessPieceColourA = '#464A49';
+var chessPieceColourA = '#594C3C';
 var chessPieceColourB = 'black';
 
 document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
