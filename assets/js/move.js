@@ -247,66 +247,56 @@ function getMovementParameters(piece){
 
     if (upMovement.length > 0) {
         blockingChecks(piece, upMovement);
+
+        for (var i = 0; i < upMovement.length; i++) {
+            availableMoves.push(upMovement[i]);
+        }
     }
     if (downMovement.length > 0) {
         blockingChecks(piece, downMovement);
-    }
-    if (leftMovement.length > 0) {
-        blockingChecks(piece, leftMovement);
-    }
-    if (rightMovement.length > 0) {
-        blockingChecks(piece, rightMovement);
-    }
-    if (diagRightMovement.length > 0) {
-        blockingChecks(piece, diagRightMovement);
-    }
-    if (diagLeftMovement.length > 0) {
-        blockingChecks(piece, diagLeftMovement);
-    }
-    if (diagRightDownMovement.length > 0) {
-        blockingChecks(piece, diagRightDownMovement);
-    }   
-    if (diagLeftDownMovement.length > 0) {
-        blockingChecks(piece, diagLeftDownMovement);
-    }
-    if (rightMovement.length > 0) {
-        for (var i = 0; i < rightMovement.length; i++) {
-            availableMoves.push(rightMovement[i]);
-        }       
-    }
 
-    if (leftMovement.length > 0) {
-        for (var i = 0; i < leftMovement.length; i++) {
-            availableMoves.push(leftMovement[i]);
-        } 
-    }
-    if (upMovement.length > 0) {
-        for (var i = 0; i < upMovement.length; i++) {
-            availableMoves.push(upMovement[i]);
-        } 
-    }
-    if (downMovement.length > 0) {
         for (var i = 0; i < downMovement.length; i++) {
             availableMoves.push(downMovement[i]);
         } 
     }
+    if (leftMovement.length > 0) {
+        blockingChecks(piece, leftMovement);
 
+        for (var i = 0; i < leftMovement.length; i++) {
+            availableMoves.push(leftMovement[i]);
+        }
+    }
+    if (rightMovement.length > 0) {
+        blockingChecks(piece, rightMovement);
+
+        for (var i = 0; i < rightMovement.length; i++) {
+            availableMoves.push(rightMovement[i]);
+        } 
+    }
     if (diagRightMovement.length > 0) {
+        blockingChecks(piece, diagRightMovement);
+
         for (var i = 0; i < diagRightMovement.length; i++) {
             availableMoves.push(diagRightMovement[i]);
         } 
     }
     if (diagLeftMovement.length > 0) {
+        blockingChecks(piece, diagLeftMovement);
+
         for (var i = 0; i < diagLeftMovement.length; i++) {
             availableMoves.push(diagLeftMovement[i]);
         } 
     }
     if (diagRightDownMovement.length > 0) {
+        blockingChecks(piece, diagRightDownMovement);
+
         for (var i = 0; i < diagRightDownMovement.length; i++) {
             availableMoves.push(diagRightDownMovement[i]);
         } 
-    }
+    }   
     if (diagLeftDownMovement.length > 0) {
+        blockingChecks(piece, diagLeftDownMovement);
+
         for (var i = 0; i < diagLeftDownMovement.length; i++) {
             availableMoves.push(diagLeftDownMovement[i]);
         } 
