@@ -212,7 +212,6 @@ function addAllMovesForPieceToArray(piece) {
 }
 
 function removeValues(array, arrayToCheck, piece){
-    // filters out non available moves for piece
     array = arrayToCheck.filter(function(value) {
         return gridStatus[value] !== undefined && value !== boardGridArray[piece.col][piece.row];
     });
@@ -232,6 +231,7 @@ function getMovementParameters(piece){
 
     availableMoves = [];
 
+    // removes initial invalid moves (e.g. NaN, undefined) from the array
     leftMovement = removeValues(leftMovement, addAllMovesForPieceToArray(piece).allLeftMoves, piece);
     rightMovement = removeValues(rightMovement, addAllMovesForPieceToArray(piece).allRightMoves, piece);
     upMovement = removeValues(upMovement, addAllMovesForPieceToArray(piece).allUpMoves, piece);
@@ -242,65 +242,20 @@ function getMovementParameters(piece){
     diagLeftDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagLFTDWNMoves, piece);
     diagRightDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
 
+    // puts array into order
     rightMovement.sort();
     downMovement.sort();
 
-    if (upMovement.length > 0) {
-        blockingChecks(piece, upMovement);
+    // puts the movements from the array into availableMoves once blocking checks are taken into account
+    addValidPiecesMovementsToArray(piece, leftMovement);
+    addValidPiecesMovementsToArray(piece, rightMovement);
+    addValidPiecesMovementsToArray(piece, upMovement);
+    addValidPiecesMovementsToArray(piece, downMovement);
 
-        for (var i = 0; i < upMovement.length; i++) {
-            availableMoves.push(upMovement[i]);
-        }
-    }
-    if (downMovement.length > 0) {
-        blockingChecks(piece, downMovement);
-
-        for (var i = 0; i < downMovement.length; i++) {
-            availableMoves.push(downMovement[i]);
-        } 
-    }
-    if (leftMovement.length > 0) {
-        blockingChecks(piece, leftMovement);
-
-        for (var i = 0; i < leftMovement.length; i++) {
-            availableMoves.push(leftMovement[i]);
-        }
-    }
-    if (rightMovement.length > 0) {
-        blockingChecks(piece, rightMovement);
-
-        for (var i = 0; i < rightMovement.length; i++) {
-            availableMoves.push(rightMovement[i]);
-        } 
-    }
-    if (diagRightMovement.length > 0) {
-        blockingChecks(piece, diagRightMovement);
-
-        for (var i = 0; i < diagRightMovement.length; i++) {
-            availableMoves.push(diagRightMovement[i]);
-        } 
-    }
-    if (diagLeftMovement.length > 0) {
-        blockingChecks(piece, diagLeftMovement);
-
-        for (var i = 0; i < diagLeftMovement.length; i++) {
-            availableMoves.push(diagLeftMovement[i]);
-        } 
-    }
-    if (diagRightDownMovement.length > 0) {
-        blockingChecks(piece, diagRightDownMovement);
-
-        for (var i = 0; i < diagRightDownMovement.length; i++) {
-            availableMoves.push(diagRightDownMovement[i]);
-        } 
-    }   
-    if (diagLeftDownMovement.length > 0) {
-        blockingChecks(piece, diagLeftDownMovement);
-
-        for (var i = 0; i < diagLeftDownMovement.length; i++) {
-            availableMoves.push(diagLeftDownMovement[i]);
-        } 
-    }
+    addValidPiecesMovementsToArray(piece, diagRightMovement);
+    addValidPiecesMovementsToArray(piece, diagLeftMovement);
+    addValidPiecesMovementsToArray(piece, diagRightDownMovement);
+    addValidPiecesMovementsToArray(piece, diagLeftDownMovement);
 }
 
 function blockingChecks(piece, array) {
@@ -312,14 +267,25 @@ function blockingChecks(piece, array) {
             array.splice(index, array.length - index)
         }
     }
- }
+    // BUGS - repro: select team2 queen piece, you'll see the up movements are broken if it's in the last row
+}
+
+function addValidPiecesMovementsToArray(piece, array) {
+    if (array.length > 0) {
+        blockingChecks(piece, array);
+
+        for (var i = 0; i < array.length; i++) {
+            availableMoves.push(array[i]);
+        }
+    }
+}
 
 function highlightPlacesToMove() {
     ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height) 
     for (var i = 0; i < availableMoves.length; i++) {        
         drawHighlight('rgba(0, 255, 0, 0.2)', availableMoves[i]);
         
-        // show grid square
+        // show grid square name
         ctx3.font = "30px Arial";
         ctx3.fillStyle = "white";
         ctx3.fillText(availableMoves[i], gridArrayX[availableMoves[i]] + (37.5 / 2), gridArrayY[availableMoves[i]] + (gridSquareSize / 2));      
