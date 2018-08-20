@@ -170,29 +170,22 @@ function getTakingParameters(piece) {
     downTaking = removeBadValuesFromArray(downTaking, allTakingParameters(piece).allDownTaking, piece);
     diagTaking = removeBadValuesFromArray(diagTaking, allTakingParameters(piece).allDiagTaking, piece);
 
-    // TODO
-    // use blocking check
-
     if (upTaking.length > 0) {
-        verticalCheck(piece, upTaking, "take");
+        blockingChecks(piece, upTaking);
     }
 
     if (downTaking.length > 0) {
-        verticalCheck(piece, downTaking, "take");
+        blockingChecks(piece, downTaking);
     }
 
     if (leftTaking.length > 0) {
-        horizontalCheck(piece, leftTaking, "take");
+        blockingChecks(piece, leftTaking);
     }
 
     if (rightTaking.length > 0) {
-        horizontalCheck(piece, rightTaking, "take");
+        blockingChecks(piece, rightTaking);
     }
     
-   // if (piece.diag > 0) {
-   //     diagCheckdiagCheck(piece, diagTaking, "take")
-   // }
-
     if (rightTaking.length > 0) {
         taking.push(rightTaking);
     }
