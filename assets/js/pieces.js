@@ -1,7 +1,6 @@
 'use strict'
 
-function Piece(type, colour, col, row, CAPTURED, id, team1, inTake, piecesTaken)
-{
+function Piece(type, colour, col, row, CAPTURED, id, team1, inTake, piecesTaken) {
     this.type = type;
     this.colour = colour;
     this.col = col;
@@ -13,9 +12,7 @@ function Piece(type, colour, col, row, CAPTURED, id, team1, inTake, piecesTaken)
     this.piecesTaken = 0;
 }
 
-Piece.prototype.movement = function()
-{
-
+Piece.prototype.movement = function() {
     if (this.type === 'PAWN')
     {
         this.up = 0;
@@ -42,8 +39,8 @@ Piece.prototype.movement = function()
     {
         this.up = 1;
         this.down = 1;
-        this.left = 2;
-        this.right = 2;
+        this.left = 0;
+        this.right = 0;
         this.diag = 0;
 
         return { up: this.up, down: this.down, left: this.left, right: this.right, diag: this.diag }
@@ -157,6 +154,7 @@ Piece.prototype.taking = function () {
     }
 }
 
+// Piece(type, colour, col, row, CAPTURED, id, team1, inTake, piecesTaken)
 // Defines pawn pieces for black team 
 var pawn1 = new Piece('PAWN', chessPieceColourA, 1, 0, false, 'pawn1', true, false);
 var pawn2 = new Piece('PAWN', chessPieceColourA, 1, 1, false, 'pawn2', true, false); 
@@ -180,7 +178,6 @@ var king1 = new Piece('KING', chessPieceColourA, 0, 3, false, 'king1', true, fal
 var queen1 = new Piece('QUEEN', chessPieceColourA, 0, 4, false, 'queen1', true, false);
 
 // Opposing team pieces
-
 var pawn9 = new Piece('PAWN', chessPieceColourB, 6, 0, false, 'pawn9', false, false);
 var pawn10 = new Piece('PAWN', chessPieceColourB, 6, 1, false, 'pawn10', false, false); 
 var pawn11 = new Piece('PAWN', chessPieceColourB, 6, 2, false, 'pawn11', false, false);
@@ -217,8 +214,7 @@ piecesArray.forEach(function (value) {
 
     if (value.team1) {
         value.activeTurn = true;
-    }
-    if (!value.team1) {
+    } else {
         value.activeTurn = false;
     }
 });

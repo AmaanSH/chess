@@ -89,11 +89,33 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-            allMoveParams.allDownMoves.push(row[rowType + down] + posX);          
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+                // 2 movements on edge
+                allMoveParams.allDownMoves.push(row[rowType + 1] + (posX - 2));
+                allMoveParams.allDownMoves.push(row[rowType + 1] + (posX + 2));
+                // 1 down movement on the edges
+                allMoveParams.allDownMoves.push(row[rowType + 2] + (posX - 1));
+                allMoveParams.allDownMoves.push(row[rowType + 2] + (posX + 1));
+            } 
+            else {
+                allMoveParams.allDownMoves.push(row[rowType + down] + posX);
+            }         
         }
 
         for (var up = 0; up <= moveParams.up; up++) {         
-            allMoveParams.allUpMoves.push(row[rowType - up] + posX);  
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+                // 2 down movements on edge
+                allMoveParams.allUpMoves.push(row[rowType - 1] + (posX + 2));
+                allMoveParams.allUpMoves.push(row[rowType - 1] + (posX - 2));            
+                // right up movement on the edges
+                allMoveParams.allUpMoves.push(row[rowType - 2] + (posX - 1));
+                allMoveParams.allUpMoves.push(row[rowType - 2] + (posX + 1));
+            } 
+            else {
+                allMoveParams.allUpMoves.push(row[rowType - up] + posX);
+            }        
         }
 
         for (var right = 0; right <= moveParams.right; right++) {
@@ -116,11 +138,32 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-            allMoveParams.allDownMoves.push(row[rowType - down] + posX);            
+            if (piece.type === "KNIGHT") {
+                // 2 movements on edge
+                allMoveParams.allDownMoves.push(row[rowType - 1] + (posX - 2));
+                allMoveParams.allDownMoves.push(row[rowType - 1] + (posX + 2));
+                // 1 down movement on the edges
+                allMoveParams.allDownMoves.push(row[rowType - 2] + (posX - 1));
+                allMoveParams.allDownMoves.push(row[rowType - 2] + (posX + 1));
+            }
+            else {
+                allMoveParams.allDownMoves.push(row[rowType - down] + posX);
+            }          
         }
         // Bug: Diaganol up movement issue when piece is in the last row
         for (var up = 0; up <= moveParams.up; up++) {
-            allMoveParams.allUpMoves.push(row[rowType + up] + posX);      
+            // knight has special movement, needs to look more like an L
+            if (piece.type === "KNIGHT") {
+                // 2 down movements on edge
+                allMoveParams.allUpMoves.push(row[rowType + 1] + (posX + 2));
+                allMoveParams.allUpMoves.push(row[rowType + 1] + (posX - 2));
+                // right up movement on the edges
+                allMoveParams.allUpMoves.push(row[rowType + 2] + (posX - 1));
+                allMoveParams.allUpMoves.push(row[rowType + 2] + (posX + 1));
+            }
+            else {
+                allMoveParams.allUpMoves.push(row[rowType + up] + posX);
+            }        
         }
 
         for (var right = 0; right <= moveParams.right; right++) {
@@ -188,9 +231,16 @@ function blockingChecks(piece, array) {
     // Check the array being passed in
     // if a piece is on spot, remove from that piece downwards
     for (var i = 0; i < array.length; i++) {
-        if (gridStatus[array[i]] == true) {
+        if (gridStatus[array[i]] === true) {
             var index = array.indexOf(array[i])
-            array.splice(index, array.length - index)
+
+            // knight can step over pieces to reach destination
+            if (piece.type === "KNIGHT") {
+                array.splice(index, 1)
+                i = - 1;
+            } else {
+                array.splice(index, array.length - index)
+            }           
         }
     }
 }
