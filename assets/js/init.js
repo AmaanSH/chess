@@ -27,8 +27,8 @@ var beingBlocked = false;
 var chessBoardSquareA = '#D9D1C7';
 var chessBoardSquareB = '#F2E8DC';
 
-var chessPieceColourA = '#594C3C';
-var chessPieceColourB = 'black';
+var chessPieceColourA = 'black';
+var chessPieceColourB = '#594C3C';
 
 document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
 
