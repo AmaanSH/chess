@@ -89,44 +89,11 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-            // knight has special movement, needs to look more like an L
-            if (piece.type === "KNIGHT") {
-
-                // 2 movements on edge
-                allMoveParams.allDownMoves.push(row[rowType + down] + (posX - 2));
-                allMoveParams.allDownMoves.push(row[rowType + down] + (posX + 2));
-
-                // 2 down movements
-                allMoveParams.allDownMoves.push(row[rowType + (down + 1)] + posX);
-
-                // 1 down movement on the edges
-                allMoveParams.allDownMoves.push(row[rowType + 2] + (posX - 1));
-                allMoveParams.allDownMoves.push(row[rowType + 2] + (posX + 1));
-            } 
-            else {
-                allMoveParams.allDownMoves.push(row[rowType + down] + posX);
-            }         
+            allMoveParams.allDownMoves.push(row[rowType + down] + posX);          
         }
 
-        for (var up = 0; up <= moveParams.up; up++) {
-            
-            // knight has special movement, needs to look more like an L
-            if (piece.type === "KNIGHT") {
-
-                // 2 down movements on edge
-                allMoveParams.allUpMoves.push(row[rowType - up] + (posX + 2));
-                allMoveParams.allUpMoves.push(row[rowType - up] + (posX - 2));
-                
-                // 2 up movements connecting to 1 on each end
-                allMoveParams.allUpMoves.push(row[rowType - (up + 1)] + posX);
-
-                // right up movement on the edges
-                allMoveParams.allUpMoves.push(row[rowType - 2] + (posX - 1));
-                allMoveParams.allUpMoves.push(row[rowType - 2] + (posX + 1));
-            } 
-            else {
-                allMoveParams.allUpMoves.push(row[rowType - up] + posX);
-            }        
+        for (var up = 0; up <= moveParams.up; up++) {         
+            allMoveParams.allUpMoves.push(row[rowType - up] + posX);  
         }
 
         for (var right = 0; right <= moveParams.right; right++) {
@@ -149,47 +116,11 @@ function addAllMovesForPieceToArray(piece) {
             if (piece.F_TURN) {
                 moveParams.down = 2;
             }
-
-            if (piece.type === "KNIGHT") {
-
-                // 2 movements on edge
-                allMoveParams.allDownMoves.push(row[rowType - down] + (posX - 2));
-                allMoveParams.allDownMoves.push(row[rowType - down] + (posX + 2));
-
-                // 2 down movements
-                allMoveParams.allDownMoves.push(row[rowType - down] + posX);
-
-                // 1 down movement on the edges
-                allMoveParams.allDownMoves.push(row[rowType - 2] + (posX - 1));
-                allMoveParams.allDownMoves.push(row[rowType - 2] + (posX + 1));
-
-            }
-            else {
-                allMoveParams.allDownMoves.push(row[rowType - down] + posX);
-            }          
+            allMoveParams.allDownMoves.push(row[rowType - down] + posX);            
         }
         // Bug: Diaganol up movement issue when piece is in the last row
         for (var up = 0; up <= moveParams.up; up++) {
-            // knight has special movement, needs to look more like an L
-            if (piece.type === "KNIGHT") {
-
-                // 2 down movements on edge
-                allMoveParams.allUpMoves.push(row[rowType + up] + (posX + 2));
-                allMoveParams.allUpMoves.push(row[rowType + up] + (posX - 2));
-
-                // 2 up movements connecting to 1 on each end
-                allMoveParams.allUpMoves.push(row[rowType - (up + 1)] + posX);
-
-                // right up movement on the edges
-                allMoveParams.allUpMoves.push(row[rowType + 2] + (posX - 1));
-                allMoveParams.allUpMoves.push(row[rowType + 2] + (posX + 1));
-
-                allMoveParams.allUpMoves.push(row[rowType + up] + posX);
-                allMoveParams.allUpMoves.push(row[rowType + (up + 1)] + posX);
-            }
-            else {
-                allMoveParams.allUpMoves.push(row[rowType + up] + posX);
-            }        
+            allMoveParams.allUpMoves.push(row[rowType + up] + posX);      
         }
 
         for (var right = 0; right <= moveParams.right; right++) {
@@ -262,7 +193,6 @@ function blockingChecks(piece, array) {
             array.splice(index, array.length - index)
         }
     }
-    // BUGS - repro: select team2 queen piece, you'll see the up movements are broken if it's in the last row
 }
 
 function addValidPiecesMovementsToArray(piece, array) {
