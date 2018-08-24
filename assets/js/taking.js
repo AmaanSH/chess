@@ -1,18 +1,4 @@
-'use strict';
-
-// Reference the taking prototype on piece -- DONE
-// Need to look at all moves for piece -- DONE
-// Need to see if there is a piece on any of those spots -- DONE
-// If there is, look to see if it falls in the taking radius of the current piece -- DONE
-// If true, highlight section red -- DONE
-// Check to see if piece that is in taking parameters is not on the same team -- DONE
-// Change Captured flag to true and in play false -- DONE
-
-// BUG LIST
-// Other side blocking check issue -- DONE
-// Knight turns on team 2 are missing bottom 2 movements -- DONE
-// Check mate checks need adjusting -- 
-// Takeable spaces needs to also use blocking checks -- IN PROGRESS
+'use strict'
 
 function allTakingParameters(piece) {
     var posX = clickPosX / gridSquareSize;
@@ -24,7 +10,11 @@ function allTakingParameters(piece) {
         allRightTaking: [],
         allUpTaking: [],
         allDownTaking: [],
-        allDiagTaking: []
+
+        allDiagLFTMoves: [],
+        allDiagRGTMoves: [],
+        allDiagRGTDWNMoves: [],
+        allDiagLFTDWNMoves: []
     }
 
     // gets index of the piececlick col inside of row array
@@ -34,13 +24,13 @@ function allTakingParameters(piece) {
         if (takeParams.DIAG > 0) {
             for (var diag = 0; diag <= takeParams.DIAG; diag++) {
                 if (piece.TAKE_FORWARD) {
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX - diag));
+                    allTaking.allDiagRGTDWNMoves.push(row[rowType + diag] + (posX + diag));
+                    allTaking.allDiagRGTMoves.push(row[rowType + diag] + (posX - diag));
                 } else {
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX - diag));
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX - diag));
+                    allTaking.allDiagRGTDWNMoves.push(row[rowType + diag] + (posX + diag));
+                    allTaking.allDiagLFTDWNMoves.push(row[rowType - diag] + (posX + diag));
+                    allTaking.allDiagRGTMoves.push(row[rowType + diag] + (posX - diag));
+                    allTaking.allDiagLFTMoves.push(row[rowType - diag] + (posX - diag));
                 }
             }
         }
@@ -83,13 +73,13 @@ function allTakingParameters(piece) {
         if (takeParams.DIAG > 0) {
             for (var diag = 0; diag <= takeParams.DIAG; diag++) {
                 if (piece.TAKE_FORWARD) {
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX - diag));
+                    allTaking.allDiagRGTDWNMoves.push(row[rowType - diag] + (posX + diag));
+                    allTaking.allDiagRGTMoves.push(row[rowType - diag] + (posX - diag));
                 } else {
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX + diag));
-                    allTaking.allDiagTaking.push(row[rowType + diag] + (posX - diag));
-                    allTaking.allDiagTaking.push(row[rowType - diag] + (posX - diag));
+                    allTaking.allDiagRGTDWNMoves.push(row[rowType + diag] + (posX + diag));
+                    allTaking.allDiagLFTDWNMoves.push(row[rowType - diag] + (posX + diag));
+                    allTaking.allDiagRGTMoves.push(row[rowType + diag] + (posX - diag));
+                    allTaking.allDiagLFTMoves.push(row[rowType - diag] + (posX - diag));
                 }
             }
         }
@@ -132,7 +122,7 @@ function allTakingParameters(piece) {
     return allTaking;
 }
 
-function removeBadValuesFromArray(array, arrayToCheck, piece) {
+function removeBadValuesFromArray(array, arrayToCheck, piece, taking) {
     array = arrayToCheck.filter(function (value) {
         return gridStatus[value] !== undefined && value !== boardGridArray[piece.col][piece.row] && gridStatus[value] !== false;
     });
@@ -152,6 +142,11 @@ function removeBadValuesFromArray(array, arrayToCheck, piece) {
             }
         }
     }
+    takingBlockingCheck(piece, array)
+
+    for (var i = 0; i < array.length; i++) {
+        taking.push(array[i]);
+    }    
     return array
 }
 
@@ -160,58 +155,28 @@ function getTakingParameters(piece) {
     var rightTaking = [];
     var upTaking = [];
     var downTaking = [];
-    var diagTaking = [];
+
+    var diagRightMovement = [];
+    var diagLeftMovement = [];
+    var diagRightDownMovement = [];
+    var diagLeftDownMovement = [];
 
     var taking = [];
 
-    leftTaking = removeBadValuesFromArray(leftTaking, allTakingParameters(piece).allLeftTaking, piece);
-    rightTaking = removeBadValuesFromArray(rightTaking, allTakingParameters(piece).allRightTaking, piece);
-    upTaking = removeBadValuesFromArray(upTaking, allTakingParameters(piece).allUpTaking, piece);
-    downTaking = removeBadValuesFromArray(downTaking, allTakingParameters(piece).allDownTaking, piece);
-    diagTaking = removeBadValuesFromArray(diagTaking, allTakingParameters(piece).allDiagTaking, piece);
+    leftTaking = removeBadValuesFromArray(leftTaking, allTakingParameters(piece).allLeftTaking, piece, taking);
+    rightTaking = removeBadValuesFromArray(rightTaking, allTakingParameters(piece).allRightTaking, piece, taking);
+    upTaking = removeBadValuesFromArray(upTaking, allTakingParameters(piece).allUpTaking, piece, taking);
+    downTaking = removeBadValuesFromArray(downTaking, allTakingParameters(piece).allDownTaking, piece, taking);
 
-    if (upTaking.length > 0) {
-        blockingChecks(piece, upTaking);
-    }
+    diagRightMovement = removeBadValuesFromArray(diagRightMovement, allTakingParameters(piece).allDiagRGTMoves, piece, taking);
+    diagLeftMovement = removeBadValuesFromArray(diagLeftMovement, allTakingParameters(piece).allDiagLFTMoves, piece, taking);
+    diagRightDownMovement = removeBadValuesFromArray(diagRightDownMovement, allTakingParameters(piece).allDiagRGTDWNMoves, piece, taking);
+    diagLeftDownMovement = removeBadValuesFromArray(diagLeftDownMovement, allTakingParameters(piece).allDiagLFTDWNMoves, piece, taking);
 
-    if (downTaking.length > 0) {
-        blockingChecks(piece, downTaking);
-    }
-
-    if (leftTaking.length > 0) {
-        blockingChecks(piece, leftTaking);
-    }
-
-    if (rightTaking.length > 0) {
-        blockingChecks(piece, rightTaking);
-    }
-    
-    if (rightTaking.length > 0) {
-        taking.push(rightTaking);
-    }
-
-    if (leftTaking.length > 0) {
-        taking.push(leftTaking);
-    }
-
-    if (upTaking.length > 0) {
-        taking.push(upTaking);
-    }
-
-    if (downTaking.length > 0) {
-        taking.push(downTaking);
-    }
-
-    if (diagTaking.length > 0) {
-        taking.push(diagTaking);
-    }
-    
     return taking;
 }
 
 function highlightTakeablePlaces(piece) {
-    // BUGS
-    // Your own pieces are being highlighted as takeable, but not possible -- FIXED (getTakingParameters)
     var takeArray = getTakingParameters(piece);
 
     if (takeArray.length > 0) {
@@ -226,8 +191,7 @@ function checkIfPieceCanBeTaken(piece) {
         // checks to see if the mouseX position matches with the index stated in the piecesArray 
         if (mouse.x >= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.x <= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
             // checks to see if the mouseY position matches with the index in the pieces array
-            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {         
-                
+            if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {                        
                 piecesArray[i].CAPTURED = true;
                 piece.piecesTaken++    
                                  
@@ -239,14 +203,5 @@ function checkIfPieceCanBeTaken(piece) {
                 return true;
             }
         }
-    }
-}
-
-function updatingScore(piece) {
-    if (piece.team1) {
-        score1++
-    }
-    else {
-        score2++
     }
 }

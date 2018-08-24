@@ -28,6 +28,15 @@ function currentTurn(piece) {
     }
 }
 
+function updatingScore(piece) {
+    if (piece.team1) {
+        score1++
+    }
+    else {
+        score2++
+    }
+}
+
 function endGame() {
     document.getElementById('turn').textContent = "END OF GAME";
     document.querySelector("#endScreen").style.display = "block";

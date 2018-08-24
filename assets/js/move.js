@@ -22,20 +22,23 @@ function mousePos(event) {
 
         if (pieceClicked != null && currentTurn(pieceClicked)) {
             getMovementParameters(pieceClicked);
-            //getTakingParameters(pieceClicked);
+            getTakingParameters(pieceClicked);
 
             if (getMovementParameters(pieceClicked) !== null){
                 highlightPlacesToMove(); 
             }
 
-            //if (getTakingParameters(pieceClicked) !== null) {
-            //    highlightTakeablePlaces(pieceClicked);            
-            //}
+            if (getTakingParameters(pieceClicked) !== null) {
+                for (var i = 0; i < getTakingParameters(pieceClicked).length; i++) {
+                    takeArray.push(getTakingParameters(pieceClicked)[i])
+                }
+
+                highlightTakeablePlaces(pieceClicked);            
+            }
         } else {
             pieceClicked = false;
         }
     } else {
-
         if (pieceClicked.type === "KING" && pieceClicked.IN_CHECK) {
             hasKingMoved(pieceClicked.col, pieceClicked.row, clickPosX, clickPosY);
         }
@@ -188,6 +191,7 @@ function removeValues(array, arrayToCheck, piece){
     array = arrayToCheck.filter(function(value) {
         return gridStatus[value] !== undefined && value !== boardGridArray[piece.col][piece.row];
     });
+    addValidPiecesMovementsToArray(piece, array)
     return array
 }
 
@@ -204,7 +208,7 @@ function getMovementParameters(piece){
 
     availableMoves = [];
 
-    // removes initial invalid moves (e.g. NaN, undefined) from the array
+    // removes all invalid moves for the piece
     leftMovement = removeValues(leftMovement, addAllMovesForPieceToArray(piece).allLeftMoves, piece);
     rightMovement = removeValues(rightMovement, addAllMovesForPieceToArray(piece).allRightMoves, piece);
     upMovement = removeValues(upMovement, addAllMovesForPieceToArray(piece).allUpMoves, piece);
@@ -213,25 +217,14 @@ function getMovementParameters(piece){
     diagRightMovement = removeValues(diagRightMovement, addAllMovesForPieceToArray(piece).allDiagRGTMoves, piece);
     diagLeftMovement = removeValues(diagLeftMovement, addAllMovesForPieceToArray(piece).allDiagLFTMoves, piece);
     diagLeftDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagLFTDWNMoves, piece);
-    diagRightDownMovement = removeValues(diagLeftDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
-
-    // puts the movements from the array into availableMoves once blocking checks are taken into account
-    addValidPiecesMovementsToArray(piece, leftMovement);
-    addValidPiecesMovementsToArray(piece, rightMovement);
-    addValidPiecesMovementsToArray(piece, upMovement);
-    addValidPiecesMovementsToArray(piece, downMovement);
-
-    addValidPiecesMovementsToArray(piece, diagRightMovement);
-    addValidPiecesMovementsToArray(piece, diagLeftMovement);
-    addValidPiecesMovementsToArray(piece, diagRightDownMovement);
-    addValidPiecesMovementsToArray(piece, diagLeftDownMovement);
+    diagRightDownMovement = removeValues(diagRightDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
 }
 
 function blockingChecks(piece, array) {
     // Check the array being passed in
     // if a piece is on spot, remove from that piece downwards
     for (var i = 0; i < array.length; i++) {
-        if (gridStatus[array[i]] === true) {
+        if (gridStatus[array[i]] === true) {            
             var index = array.indexOf(array[i])
 
             // knight can step over pieces to reach destination
@@ -243,6 +236,42 @@ function blockingChecks(piece, array) {
             }           
         }
     }
+}
+
+function calculateDistance(piece, col, row) {
+    if (piece.team1) {
+       return boardGridArray[piece.col + col][piece.row + row]
+    } else {
+        return boardGridArray[piece.col - col][piece.row - row]
+    }
+}
+
+function calculateIterate(piece, type) {
+    if (piece.team1) {
+        return 8 - type
+    } else {
+        return type
+    }
+}
+
+function takingBlockingCheck(piece, array) {  
+    for (var col = 0; col < calculateIterate(piece, piece.col); col++) {
+        for (var row = 0; row < 8 - piece.row; row++) {
+            if (gridStatus[calculateDistance(piece, col, row)] && calculateDistance(piece, col, row) !== boardGridArray[piece.col][piece.row]) {          
+                for (var foundValue = 0; foundValue < array.length; foundValue++) {
+                    // taking advantage of JavaScript's Lexicographical order
+                    if (array[foundValue] > calculateDistance(piece, col, row)) {
+                        var index = array.indexOf(calculateDistance(piece, col, row))
+                        if (index > -1) {
+                            array.splice(index, 1)
+                            foundValue = - 1
+                        }
+                    } 
+                }
+            }            
+        }
+        return array;   
+    }   
 }
 
 function addValidPiecesMovementsToArray(piece, array) {
@@ -314,7 +343,6 @@ function validateMove(pieceClicked, posX, posY) {
 }
 
 function movePiece(pieces, newCol, newRow) {
-
     if (validateMove(pieces, newCol, newRow) === true) {
         var oldCol = pieces.col;
         var oldRow = pieces.row;
