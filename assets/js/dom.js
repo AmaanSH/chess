@@ -6,27 +6,21 @@ function addTextToPage(id, text) {
     textOnPage.textContent = text;
 }
 
+function changeElementColour(id, colour) {
+    document.getElementById(id).style.backgroundColor = colour;
+}
+
 function updateTurnText() {
     if (player1Turn) {
         addTextToPage('turn', "PLAYER 1 TURN");
         addTextToPage('piecesTaken', "PIECES TAKEN: " + score1);
-
-        document.getElementById('turn-box').style.backgroundColor = chessPieceColourA; 
+        changeElementColour('turn-box', chessPieceColourA)
         return;
     }
     if (player2Turn) {
         addTextToPage('turn', "PLAYER 2 TURN");
         addTextToPage('piecesTaken', "PIECES TAKEN: " + score2);
-
-        document.getElementById('turn-box').style.backgroundColor = chessPieceColourB; 
+        changeElementColour('turn-box', chessPieceColourB)
         return;
     }
 }
-
-/* function clearPieceInfoText() {
-    pieceSelected.textContent = "";
-    currentPos.textContent = "";
-  
-    pieceSelectedT2.textContent = "";
-    currentPosT2.textContent = "";
-} */
