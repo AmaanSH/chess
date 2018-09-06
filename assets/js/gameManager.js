@@ -31,8 +31,7 @@ function currentTurn(piece) {
 function updatingScore(piece) {
     if (piece.team1) {
         score1++
-    }
-    else {
+    } else {
         score2++
     }
 }

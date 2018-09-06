@@ -24,7 +24,7 @@ function initBoard() {
     }
 }
 
-function InitChessPiecesOnBoard() {
+function initChessPiecesOnBoard() {
 
     for (var i = 0; i < piecesArray.length; i++) {   
         if (piecesArray[i].CAPTURED !== true) {
@@ -41,4 +41,4 @@ function InitChessPiecesOnBoard() {
 }
 
 initBoard();
-InitChessPiecesOnBoard();
+initChessPiecesOnBoard();
