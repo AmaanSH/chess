@@ -32,23 +32,20 @@ function mousePos(event) {
                 for (var i = 0; i < getTakingParameters(pieceClicked).length; i++) {
                     takeArray.push(getTakingParameters(pieceClicked)[i])
                 }
-
                 highlightTakeablePlaces(pieceClicked);            
             }
         } else {
             pieceClicked = false;
         }
     } else {
-        if (pieceClicked.type === "KING" && pieceClicked.IN_CHECK) {
+        if (king1.IN_CHECK === true || king2.IN_CHECK === true) {
             hasKingMoved(pieceClicked.col, pieceClicked.row, clickPosX, clickPosY);
         }
      
         movePiece(pieceClicked, clickPosX, clickPosY);
-
-        ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height)
+        ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height);
 
         pieceClicked = false;
-        beingBlocked = false;
         takeArray = [];
     }
 }
@@ -57,10 +54,8 @@ function getPieceClicked() {
     for (var i = 0; i < piecesArray.length; i++) {
         // checks to see if the mouseX position matches with the index stated in the piecesArray 
         if (mouse.x >= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.x <= gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
-
             // checks to see if the mouseY position matches with the index in the pieces array
             if (mouse.y >= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] && mouse.y <= gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]]) {
-
                 //console.log('Piece: ' + piecesArray[i].id + ' Pos: ' + boardGridArray[piecesArray[i].col][piecesArray[i].row] + ' Team1: ' + piecesArray[i].team1)
                 return piecesArray[i]
             }
@@ -220,6 +215,22 @@ function getMovementParameters(piece){
     diagRightDownMovement = removeValues(diagRightDownMovement, addAllMovesForPieceToArray(piece).allDiagRGTDWNMoves, piece);
 }
 
+function findPieceOnGridRef(position) {
+    for (var i = 0; i < boardGridArray.length; i++) {
+        if (boardGridArray[i].indexOf(position) > -1) {
+            return returnPieceFound(i, boardGridArray[i].indexOf(position))
+        }
+    }
+}
+
+function returnPieceFound(col, row) {
+    for (var i = 0; i < piecesArray.length; i++) {
+        if (piecesArray[i].row === row && piecesArray[i].col === col) {
+            return piecesArray[i]
+        }
+    }
+}
+
 function blockingChecks(piece, array) {
     // Check the array being passed in
     // if a piece is on spot, remove from that piece downwards
@@ -227,12 +238,17 @@ function blockingChecks(piece, array) {
         if (gridStatus[array[i]] === true) {            
             var index = array.indexOf(array[i])
 
+            if (findPieceOnGridRef(array[i]).type === "KING" && findPieceOnGridRef(array[i]).team1 !== piece.team1) {
+                findPieceOnGridRef(array[i]).IN_CHECK = true;
+                console.log("king in check");
+            }
+
             // knight can step over pieces to reach destination
             if (piece.type === "KNIGHT") {
-                array.splice(index, 1)
+                array.splice(index, 1);
                 i = - 1;
             } else {
-                array.splice(index, array.length - index)
+                array.splice(index, array.length - index);
             }           
         }
     }
@@ -246,11 +262,11 @@ function calculateDistance(piece, col, row) {
     }
 }
 
-function calculateIterate(piece, type) {
+function calculateIterate(piece, pos) {
     if (piece.team1) {
-        return 8 - type
+        return 8 - pos
     } else {
-        return type
+        return pos
     }
 }
 
@@ -269,22 +285,21 @@ function takingBlockingCheck(piece, array) {
             if (gridStatus[calculateDistance(piece, col, row)] && calculateDistance(piece, col, row) !== boardGridArray[piece.col][piece.row]) {          
                 for (var foundValue = 0; foundValue < array.length; foundValue++) {
                     // taking advantage of JavaScript's Lexicographical order
-                    // if piece found is a taking piece
+
+                    // if piece found is a taking piece, remove from that piece forward
                     if (array[foundValue] === calculateDistance(piece, col, row)) {
                         var index = foundValue + 1
                         array.splice(index, array.length - index)
-                        //foundValue = - 1
                     }
 
-                    // if its further than blocking piece, assume we cannot take
+                    // if its further than blocking piece, assume we cannot take so remove
                     if (calculateTakingPath(piece, col, row, foundValue, array)) {
-                        array.splice(0, array.length)
+                        array.splice(foundValue, 1)
                     }
 
                     // less than blocking piece, is takeable
-                    if (calculateTakingPath(piece, col, row, foundValue, array)) {
+                    if (array[foundValue] < calculateDistance(piece, col, row)) {
                         array.splice(foundValue + 1, 1)
-                        //foundValue = - 1
                     } 
                 }
             }            
@@ -327,8 +342,6 @@ function validateMove(pieceClicked, posX, posY) {
     var moveRow = row[posY];
     var index = availableMoves.indexOf(moveRow + posX);
 
-    var checkMateChecked = false;
-
     // if takeable piece available
     if (takeArray.length > 0) {
         takeArray.forEach(function (takeableSpaces) {
@@ -336,12 +349,7 @@ function validateMove(pieceClicked, posX, posY) {
                 pieceClicked.inTake = true;
                 ctx2.clearRect(gridArrayX[boardGridArray[posY][posX]], gridArrayY[boardGridArray[posY][posX]], gridSquareSize, gridSquareSize);
                 gridStatus[boardGridArray[posY][posX]] = false;
-            }
-            // if king is inside of takeArray
-            if (checkMateChecked === false) {
-                checkMateCheck();
-                checkMateChecked = true;
-            }               
+            }              
         });
     } 
     if (index > -1 && gridStatus[moveRow + posX] === false && pieceClicked.inTake !== true) {
