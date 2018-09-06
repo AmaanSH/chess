@@ -20,7 +20,6 @@ document.querySelector("#endScreen").style.display = "none";
 
 var player1Turn = true;
 var player2Turn = false;
-var beingBlocked = false;
 
 // --------------------------
 
@@ -40,27 +39,23 @@ const gridSquareSize = 75;
 
 // --------------------------
 
-
 var gridArrayX = []; 
 var gridArrayY = [];
 var piecesArray = [];
 var newPiecesArray = [];
 var availableMoves = [];
 var takeArray = [];
-var kingTakeableSpaces = [];
 
 var row = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 // 2d array
 var boardGridArray = new Array(8)
 
-for (var i = 0; i < 8; i++)
-{
+for (var i = 0; i < 8; i++) {
     boardGridArray[i] = new Array(8);
 }
 
 // --------------------------
-
 
 var clickPosX;
 var clickPosY;
@@ -68,17 +63,14 @@ var clickPosY;
 var pieceClicked = false;
 var taking = false;
 
-var mouse = 
-{
-    x: undefined,
-    y: undefined
+var mouse = {
+    x: null,
+    y: null
 }
-
 
 // --------------------------
 
-var gridStatus = 
-{
+var gridStatus = {
     A0: false,
     A1: false,
     A2: false,
@@ -142,6 +134,5 @@ var gridStatus =
     G6: false,
     G7: false,
 }
-
 
 // --------------------------
