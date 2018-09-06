@@ -254,18 +254,37 @@ function calculateIterate(piece, type) {
     }
 }
 
-function takingBlockingCheck(piece, array) {  
-    for (var col = 0; col < calculateIterate(piece, piece.col); col++) {
-        for (var row = 0; row < 8 - piece.row; row++) {
+function calculateTakingPath(piece, col, row, foundValue, array) {
+    if (piece.team1) {
+        return array[foundValue] > calculateDistance(piece, col, row)
+    } else {
+        return array[foundValue] < calculateDistance(piece, col, row)
+    }
+}
+
+function takingBlockingCheck(piece, array) {     
+    for (var row = 0; row < 8 - piece.row; row++) {
+        for (var col = 0; col < calculateIterate(piece, piece.col); col++) {
+            // if a piece is found on spot looking at
             if (gridStatus[calculateDistance(piece, col, row)] && calculateDistance(piece, col, row) !== boardGridArray[piece.col][piece.row]) {          
                 for (var foundValue = 0; foundValue < array.length; foundValue++) {
                     // taking advantage of JavaScript's Lexicographical order
-                    if (array[foundValue] > calculateDistance(piece, col, row)) {
-                        var index = array.indexOf(calculateDistance(piece, col, row))
-                        if (index > -1) {
-                            array.splice(index, 1)
-                            foundValue = - 1
-                        }
+                    // if piece found is a taking piece
+                    if (array[foundValue] === calculateDistance(piece, col, row)) {
+                        var index = foundValue + 1
+                        array.splice(index, array.length - index)
+                        //foundValue = - 1
+                    }
+
+                    // if its further than blocking piece, assume we cannot take
+                    if (calculateTakingPath(piece, col, row, foundValue, array)) {
+                        array.splice(0, array.length)
+                    }
+
+                    // less than blocking piece, is takeable
+                    if (calculateTakingPath(piece, col, row, foundValue, array)) {
+                        array.splice(foundValue + 1, 1)
+                        //foundValue = - 1
                     } 
                 }
             }            
