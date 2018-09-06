@@ -18,8 +18,8 @@ var endScreenCtx = endScreenCanvas.getContext('2d');
 
 document.querySelector("#endScreen").style.display = "none";
 
-var player1Turn = true;
-var player2Turn = false;
+var player1Turn = false;
+var player2Turn = true;
 
 // --------------------------
 
@@ -29,7 +29,7 @@ var chessBoardSquareB = '#F2E8DC';
 var chessPieceColourA = 'black';
 var chessPieceColourB = '#594C3C';
 
-document.getElementById('turn-box').style.backgroundColor = chessPieceColourA;
+document.getElementById('turn-box').style.backgroundColor = chessPieceColourB;
 
 var textColour = 'white';
 var score1 = 0;

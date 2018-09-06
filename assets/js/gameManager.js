@@ -17,7 +17,7 @@ function currentTurn(piece) {
     if (piece.activeTurn && piece.team1 !== true) {
         for (var i = 0; i < piecesArray.length; i++) {
             piecesArray[i].activeTurn = false;  
-                      
+
             if (piecesArray[i].team1 && piecesArray[i].activeTurn !== true) {
                 piecesArray[i].activeTurn = true;
                 player1Turn = true;

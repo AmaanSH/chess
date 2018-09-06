@@ -213,8 +213,8 @@ piecesArray.forEach(function (value) {
     }
 
     if (value.team1) {
-        value.activeTurn = true;
-    } else {
         value.activeTurn = false;
+    } else {
+        value.activeTurn = true;
     }
 });
