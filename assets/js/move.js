@@ -41,10 +41,9 @@ function mousePos(event) {
         if (king1.IN_CHECK === true || king2.IN_CHECK === true) {
             hasKingMoved(pieceClicked.col, pieceClicked.row, clickPosX, clickPosY);
         }
-     
-        movePiece(pieceClicked, clickPosX, clickPosY);
+        movePiece(pieceClicked, clickPosX, clickPosY);   
+        
         ctx3.clearRect(0, 0, hightlightCanvas.width, hightlightCanvas.height);
-
         pieceClicked = false;
         takeArray = [];
     }
@@ -362,7 +361,7 @@ function validateMove(pieceClicked, posX, posY) {
     if (pieceClicked.inTake) {
         if (pieceClicked.type === 'PAWN' && pieceClicked.F_TURN) {
             pieceClicked.F_TURN = false;
-        }
+        }              
         return true;
     } else {
         return false;
@@ -399,5 +398,7 @@ function movePiece(pieces, newCol, newRow) {
         if (pieces.inTake) {
             pieces.inTake = false;
         }
-    } 
+        changeTurn(pieceClicked)
+        return true
+    }
 }

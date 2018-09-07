@@ -1,30 +1,37 @@
 "use strict";
 
 function currentTurn(piece) {
+    if (piece.activeTurn) {
+        return true
+    } else {
+        return false
+    }
+}
+
+function changeTurn(piece) {
+    // piece turn and team1
     if (piece.activeTurn && piece.team1) {
         for (var i = 0; i < piecesArray.length; i++) {
             piecesArray[i].activeTurn = false;
-                      
+            // set team 2 pieces to active          
             if (piecesArray[i].team1 !== true && piecesArray[i].activeTurn !== true) {
                 piecesArray[i].activeTurn = true;
                 player1Turn = false;
                 player2Turn = true;
             }
-        };       
-        return true;
+        }
     }
-               
+    // active turn for piece but not team1           
     if (piece.activeTurn && piece.team1 !== true) {
         for (var i = 0; i < piecesArray.length; i++) {
-            piecesArray[i].activeTurn = false;  
-
+            piecesArray[i].activeTurn = false;
+            // set team1 piece back to active
             if (piecesArray[i].team1 && piecesArray[i].activeTurn !== true) {
                 piecesArray[i].activeTurn = true;
                 player1Turn = true;
                 player2Turn = false;
             }
-        };       
-        return true; 
+        }
     }
 }
 
