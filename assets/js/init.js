@@ -42,7 +42,6 @@ const gridSquareSize = 75;
 var gridArrayX = []; 
 var gridArrayY = [];
 var piecesArray = [];
-var newPiecesArray = [];
 var availableMoves = [];
 var takeArray = [];
 

@@ -385,16 +385,14 @@ function movePiece(pieces, newCol, newRow) {
         gridStatus[boardGridArray[oldCol][oldRow]] = false;
         gridStatus[boardGridArray[newRow][newCol]] = true;
 
-       newPiecesArray.push(pieces);
-
-        for (var i = 0; i < newPiecesArray.length; i++) {
-            if (newPiecesArray[i].CAPTURED !== true) {
-                ctx2.fillStyle = newPiecesArray[i].colour;
-                ctx2.fillRect(gridArrayX[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 12.5, gridArrayY[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 12.5, 50, 50)
+        for (var i = 0; i < piecesArray.length; i++) {
+            if (pieces.id === piecesArray[i].id) {
+                ctx2.fillStyle = piecesArray[i].colour;
+                ctx2.fillRect(gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] + 12.5, gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] + 12.5, 50, 50)
 
                 ctx2.fillStyle = textColour;
                 ctx2.font = "bold 10px Arial";
-                ctx2.fillText(newPiecesArray[i].type, gridArrayX[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 15, gridArrayY[boardGridArray[newPiecesArray[i].col][newPiecesArray[i].row]] + 30);
+                ctx2.fillText(piecesArray[i].type, gridArrayX[boardGridArray[piecesArray[i].col][piecesArray[i].row]] + 15, gridArrayY[boardGridArray[piecesArray[i].col][piecesArray[i].row]] + 30);
             }
         }
 
