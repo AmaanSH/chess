@@ -11,16 +11,13 @@ function changeElementColour(id, colour) {
 }
 
 function updateTurnText() {
-    if (player1Turn) {
-        addTextToPage('turn', "PLAYER 1 TURN");
-        addTextToPage('piecesTaken', "PIECES TAKEN: " + score1);
-        changeElementColour('turn-box', chessPieceColourA)
-        return;
-    }
     if (player2Turn) {
-        addTextToPage('turn', "PLAYER 2 TURN");
+        addTextToPage('turn', "PLAYER 1 TURN");
         addTextToPage('piecesTaken', "PIECES TAKEN: " + score2);
         changeElementColour('turn-box', chessPieceColourB)
-        return;
+    } else {
+        addTextToPage('turn', "PLAYER 2 TURN");
+        addTextToPage('piecesTaken', "PIECES TAKEN: " + score1);
+        changeElementColour('turn-box', chessPieceColourA)
     }
 }
