@@ -9,7 +9,7 @@ function currentTurn(piece) {
 }
 
 function changeTurn(piece) {
-    // piece turn and team1
+    // active turn for piece and is team1
     if (piece.activeTurn && piece.team1) {
         for (var i = 0; i < piecesArray.length; i++) {
             piecesArray[i].activeTurn = false;
@@ -46,7 +46,14 @@ function updatingScore(piece) {
 function endGame() {
     document.getElementById('turn').textContent = "END OF GAME";
     document.querySelector("#endScreen").style.display = "block";
-    
+    document.querySelector("#turn-box").style.backgroundColor = "#736453";
+
+    if (player1Turn) {
+        document.getElementById("piecesTaken").textContent = "PLAYER 2 WON";
+    } else {
+        document.getElementById("piecesTaken").textContent = "PLAYER 1 WON";
+    }
+       
     endScreenCtx.fillStyle = "#736453";
     endScreenCtx.fillRect(0, 0, 600, 600);
 
